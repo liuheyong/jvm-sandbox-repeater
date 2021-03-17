@@ -25,6 +25,10 @@ public class PersistenceFacadeApi {
     @Resource
     private ReplayService replayService;
 
+    /**
+     * 回放消息取数据地址
+     * @return
+     */
     @RequestMapping(value = "record/{appName}/{traceId}", method = RequestMethod.GET)
     public RepeaterResult<String> getWrapperRecord(@PathVariable("appName") String appName,
                                                    @PathVariable("traceId") String traceId) {
@@ -41,11 +45,19 @@ public class PersistenceFacadeApi {
         return replayService.replay(params);
     }
 
+    /**
+     * 录制消息投递地址
+     * @return
+     */
     @RequestMapping(value = "record/save", method = RequestMethod.POST)
     public RepeaterResult<String> recordSave(@RequestBody String body) {
         return recordService.saveRecord(body);
     }
 
+    /**
+     * 回放结果投递地址
+     * @return
+     */
     @RequestMapping(value = "repeat/save", method = RequestMethod.POST)
     public RepeaterResult<String> repeatSave(@RequestBody String body) {
         return replayService.saveRepeat(body);

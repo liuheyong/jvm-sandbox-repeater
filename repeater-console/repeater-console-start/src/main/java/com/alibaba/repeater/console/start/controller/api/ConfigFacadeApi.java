@@ -24,6 +24,12 @@ public class ConfigFacadeApi {
     @Resource
     private ModuleConfigService moduleConfigService;
 
+    /**
+     * 配置文件拉取地址
+     * @param appName
+     * @param env
+     * @return
+     */
     @RequestMapping("/config/{appName}/{env}")
     public RepeaterResult<RepeaterConfig> getConfig(@PathVariable("appName") String appName,
                                                     @PathVariable("env") String env) {
@@ -33,5 +39,4 @@ public class ConfigFacadeApi {
         RepeaterResult<ModuleConfigBO> result = moduleConfigService.query(params);
         return RepeaterResult.builder().success(result.isSuccess()).message(result.getMessage()).data(result.getData().getConfigModel()).build();
     }
-
 }

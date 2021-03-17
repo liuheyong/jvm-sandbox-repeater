@@ -43,6 +43,10 @@ public class ModuleInfoController {
         return moduleInfoService.query(appName);
     }
 
+    /**
+     * 心跳上报配置
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/report.json")
     public RepeaterResult<ModuleInfoBO> list(@ModelAttribute("requestParams") ModuleInfoBO params) {
