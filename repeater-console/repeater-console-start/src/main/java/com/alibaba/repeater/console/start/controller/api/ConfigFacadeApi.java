@@ -26,6 +26,7 @@ public class ConfigFacadeApi {
 
     /**
      * 配置文件拉取地址
+     *
      * @param appName
      * @param env
      * @return
@@ -37,6 +38,6 @@ public class ConfigFacadeApi {
         params.setAppName(appName);
         params.setEnvironment(env);
         RepeaterResult<ModuleConfigBO> result = moduleConfigService.query(params);
-        return RepeaterResult.builder().success(result.isSuccess()).message(result.getMessage()).data(result.getData().getConfigModel()).build();
+        return RepeaterResult.builder().success(result.isSuccess()).message(result.getMessage()).data(null == result.getData() ? null : result.getData().getConfigModel()).build();
     }
 }
