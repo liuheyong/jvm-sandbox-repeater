@@ -15,7 +15,7 @@ import java.util.List;
  * @author zhaoyb1990
  * @since 1.0.0
  */
-public class RepeaterConfig implements java.io.Serializable{
+public class RepeaterConfig implements java.io.Serializable {
 
     /**
      * 是否开启ttl线程上下文切换
