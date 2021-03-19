@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * {@link RegressController} 持续回归demo服务
  * <p>
- *
+ * 回归服务，相当于一个示例的被测服务。官方的 slogan 例子用的就是这里的接口
  * @author zhaoyb1990
  */
 @RestController

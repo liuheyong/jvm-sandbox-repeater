@@ -45,6 +45,7 @@ public class ModuleInfoController {
 
     /**
      * 心跳上报配置
+     *
      * @return
      */
     @ResponseBody

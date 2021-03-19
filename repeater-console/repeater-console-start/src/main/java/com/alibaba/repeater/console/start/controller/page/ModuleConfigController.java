@@ -65,14 +65,14 @@ public class ModuleConfigController {
     public String add(Model model) {
         RepeaterConfig defaultConf = new RepeaterConfig();
         List<Behavior> behaviors = Lists.newArrayList();
-        defaultConf.setPluginIdentities(Lists.newArrayList( "http", "java-entrance", "java-subInvoke"));
+        defaultConf.setPluginIdentities(Lists.newArrayList("http", "java-entrance", "java-subInvoke"));
         defaultConf.setRepeatIdentities(Lists.newArrayList("java", "http"));
         defaultConf.setUseTtl(true);
         defaultConf.setHttpEntrancePatterns(Lists.newArrayList("^/regress/.*$"));
         behaviors.add(new Behavior("com.alibaba.repeater.console.service.impl.RegressServiceImpl", "getRegress"));
         defaultConf.setJavaEntranceBehaviors(behaviors);
         List<Behavior> subBehaviors = Lists.newArrayList();
-        subBehaviors.add(new Behavior("com.alibaba.repeater.console.service.impl.RegressServiceImpl", "getRegressInner", "findPartner","slogan"));
+        subBehaviors.add(new Behavior("com.alibaba.repeater.console.service.impl.RegressServiceImpl", "getRegressInner", "findPartner", "slogan"));
         defaultConf.setJavaSubInvokeBehaviors(subBehaviors);
         try {
             model.addAttribute("config", JacksonUtil.serialize(defaultConf));

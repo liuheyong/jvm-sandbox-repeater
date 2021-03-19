@@ -14,8 +14,6 @@ import javax.annotation.Resource;
 
 /**
  * {@link ReplayController}
- * <p>
- *
  * @author zhaoyb1990
  */
 @Controller

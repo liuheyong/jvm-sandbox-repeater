@@ -27,6 +27,7 @@ public class PersistenceFacadeApi {
 
     /**
      * 回放消息取数据地址
+     *
      * @return
      */
     @RequestMapping(value = "record/{appName}/{traceId}", method = RequestMethod.GET)
@@ -47,6 +48,7 @@ public class PersistenceFacadeApi {
 
     /**
      * 录制消息投递地址
+     *
      * @return
      */
     @RequestMapping(value = "record/save", method = RequestMethod.POST)
@@ -56,6 +58,7 @@ public class PersistenceFacadeApi {
 
     /**
      * 回放结果投递地址
+     *
      * @return
      */
     @RequestMapping(value = "repeat/save", method = RequestMethod.POST)
