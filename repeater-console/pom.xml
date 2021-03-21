@@ -7,6 +7,8 @@
         <groupId>com.alibaba.jvm.sandbox</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
+
+    <artifactId>repeater-console</artifactId>
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <modules>
@@ -19,9 +21,8 @@
     <properties>
         <spring.boot.version>1.4.7.RELEASE</spring.boot.version>
         <jackson.version>2.10.1</jackson.version>
+        <tomcat.version>9.0.40</tomcat.version>
     </properties>
-
-    <artifactId>repeater-console</artifactId>
 
     <dependencyManagement>
         <dependencies>
@@ -29,9 +30,63 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>${spring.boot.version}</version>
+                <!--<exclusions>-->
+                <!--    <exclusion>-->
+                <!--        <groupId>org.springframework.boot</groupId>-->
+                <!--        <artifactId>spring-boot-starter-tomcat</artifactId>-->
+                <!--    </exclusion>-->
+                <!--    <exclusion>-->
+                <!--        <groupId>org.apache.tomcat.embed</groupId>-->
+                <!--        <artifactId>tomcat-embed-core</artifactId>-->
+                <!--    </exclusion>-->
+                <!--    <exclusion>-->
+                <!--        <groupId>org.apache.tomcat.embed</groupId>-->
+                <!--        <artifactId>tomcat-embed-el</artifactId>-->
+                <!--    </exclusion>-->
+                <!--    <exclusion>-->
+                <!--        <groupId>org.apache.tomcat.embed</groupId>-->
+                <!--        <artifactId>tomcat-embed-websocket</artifactId>-->
+                <!--    </exclusion>-->
+                <!--    <exclusion>-->
+                <!--        <groupId>org.apache.tomcat</groupId>-->
+                <!--        <artifactId>tomcat-annotations-api</artifactId>-->
+                <!--    </exclusion>-->
+                <!--</exclusions>-->
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!--<dependency>-->
+            <!--    <groupId>org.apache.tomcat.embed</groupId>-->
+            <!--    <artifactId>tomcat-embed-core</artifactId>-->
+            <!--    <version>${tomcat.version}</version>-->
+            <!--    <exclusions>-->
+            <!--        <exclusion>-->
+            <!--            <groupId>org.apache.tomcat</groupId>-->
+            <!--            <artifactId>tomcat-annotations-api</artifactId>-->
+            <!--        </exclusion>-->
+            <!--    </exclusions>-->
+            <!--</dependency>-->
+            <!--<dependency>-->
+            <!--    <groupId>org.apache.tomcat</groupId>-->
+            <!--    <artifactId>tomcat-annotations-api</artifactId>-->
+            <!--    <version>${tomcat.version}</version>-->
+            <!--</dependency>-->
+            <!--<dependency>-->
+            <!--    <groupId>org.apache.tomcat.embed</groupId>-->
+            <!--    <artifactId>tomcat-embed-el</artifactId>-->
+            <!--    <version>${tomcat.version}</version>-->
+            <!--</dependency>-->
+            <!--<dependency>-->
+            <!--    <groupId>org.apache.tomcat.embed</groupId>-->
+            <!--    <artifactId>tomcat-embed-websocket</artifactId>-->
+            <!--    <version>${tomcat.version}</version>-->
+            <!--    <exclusions>-->
+            <!--        <exclusion>-->
+            <!--            <groupId>org.apache.tomcat.embed</groupId>-->
+            <!--            <artifactId>tomcat-embed-core</artifactId>-->
+            <!--        </exclusion>-->
+            <!--    </exclusions>-->
+            <!--</dependency>-->
             <dependency>
                 <groupId>net.sf.ehcache</groupId>
                 <artifactId>ehcache</artifactId>

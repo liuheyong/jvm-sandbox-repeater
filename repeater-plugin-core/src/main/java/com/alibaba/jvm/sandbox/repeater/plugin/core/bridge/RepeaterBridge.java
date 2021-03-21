@@ -1,11 +1,11 @@
 package com.alibaba.jvm.sandbox.repeater.plugin.core.bridge;
 
+import com.alibaba.jvm.sandbox.repeater.plugin.domain.InvokeType;
+import com.alibaba.jvm.sandbox.repeater.plugin.spi.Repeater;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.alibaba.jvm.sandbox.repeater.plugin.domain.InvokeType;
-import com.alibaba.jvm.sandbox.repeater.plugin.spi.Repeater;
 
 /**
  * {@link RepeaterBridge} 回放器桥接器
@@ -15,20 +15,23 @@ import com.alibaba.jvm.sandbox.repeater.plugin.spi.Repeater;
  */
 public class RepeaterBridge {
 
-    private RepeaterBridge() {}
+    private RepeaterBridge() {
+    }
 
-    private volatile Map<InvokeType, Repeater> cached = new HashMap<InvokeType, Repeater>();
+    private volatile Map<String, Repeater> cached = new HashMap<String, Repeater>();
 
     public static RepeaterBridge instance() {
         return RepeaterBridge.LazyInstanceHolder.INSTANCE;
     }
 
     public void build(List<Repeater> rs) {
-        if (rs == null || rs.isEmpty()) { return; }
+        if (rs == null || rs.isEmpty()) {
+            return;
+        }
         // reset repeat'er container
         cached.clear();
         for (Repeater repeater : rs) {
-            cached.put(repeater.getType(), repeater);
+            cached.put(repeater.getType().name(), repeater);
         }
     }
 
@@ -43,6 +46,6 @@ public class RepeaterBridge {
      * @return 回放器
      */
     public Repeater select(InvokeType type) {
-        return cached.get(type);
+        return cached.get(type.name());
     }
 }

@@ -5,6 +5,7 @@ import com.alibaba.jvm.sandbox.repeater.plugin.domain.RepeaterResult;
 import com.alibaba.repeater.console.common.params.ReplayParams;
 import com.alibaba.repeater.console.service.RecordService;
 import com.alibaba.repeater.console.service.ReplayService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -17,13 +18,41 @@ import javax.servlet.http.HttpServletRequest;
  * @author zhaoyb1990
  */
 @RestController
-@RequestMapping("/facade/api")
+@RequestMapping("/facade/api/")
 public class PersistenceFacadeApi {
 
     @Resource
     private RecordService recordService;
     @Resource
     private ReplayService replayService;
+
+    /**
+     * 触发回放
+     *
+     * @Author: liuheyong
+     * @date: 2021/3/21
+     */
+    @PostMapping(value = "repeat")
+    public RepeaterResult<String> repeat(@RequestBody ReplayParams param, HttpServletRequest request) {
+        ReplayParams params = ReplayParams.builder().repeatId(request.getHeader("RepeatId")).build();
+        params.setAppName(param.getAppName());
+        params.setTraceId(param.getTraceId());
+        if (StringUtils.isBlank(params.getIp())) {
+            params.setIp(param.getIp());
+        }
+        return replayService.replay(params);
+    }
+
+    /**
+     * 查看回放结果
+     *
+     * @Author: liuheyong
+     * @date: 2021/3/21
+     */
+    @RequestMapping(value = "repeat/callback/{repeatId}", method = RequestMethod.GET)
+    public RepeaterResult<RepeatModel> callback(@PathVariable("repeatId") String repeatId) {
+        return recordService.callback(repeatId);
+    }
 
     /**
      * 回放消息取数据地址
@@ -34,16 +63,6 @@ public class PersistenceFacadeApi {
     public RepeaterResult<String> getWrapperRecord(@PathVariable("appName") String appName,
                                                    @PathVariable("traceId") String traceId) {
         return recordService.get(appName, traceId);
-    }
-
-    @RequestMapping(value = "repeat/{appName}/{traceId}", method = RequestMethod.GET)
-    public RepeaterResult<String> repeat(@PathVariable("appName") String appName,
-                                         @PathVariable("traceId") String traceId,
-                                         HttpServletRequest request) {
-        ReplayParams params = ReplayParams.builder().repeatId(request.getHeader("RepeatId")).build();
-        params.setAppName(appName);
-        params.setTraceId(traceId);
-        return replayService.replay(params);
     }
 
     /**
@@ -64,11 +83,6 @@ public class PersistenceFacadeApi {
     @RequestMapping(value = "repeat/save", method = RequestMethod.POST)
     public RepeaterResult<String> repeatSave(@RequestBody String body) {
         return replayService.saveRepeat(body);
-    }
-
-    @RequestMapping(value = "repeat/callback/{repeatId}", method = RequestMethod.GET)
-    public RepeaterResult<RepeatModel> callback(@PathVariable("repeatId") String repeatId) {
-        return recordService.callback(repeatId);
     }
 
 }
