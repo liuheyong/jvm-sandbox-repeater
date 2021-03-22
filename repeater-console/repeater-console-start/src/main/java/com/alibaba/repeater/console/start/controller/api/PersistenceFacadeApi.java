@@ -27,7 +27,7 @@ public class PersistenceFacadeApi {
     private ReplayService replayService;
 
     /**
-     * 触发回放
+     * 手动触发回放
      *
      * @Author: liuheyong
      * @date: 2021/3/21
@@ -44,7 +44,7 @@ public class PersistenceFacadeApi {
     }
 
     /**
-     * 查看回放结果
+     * 手动查看回放结果
      *
      * @Author: liuheyong
      * @date: 2021/3/21
@@ -55,7 +55,7 @@ public class PersistenceFacadeApi {
     }
 
     /**
-     * 回放消息取数据地址
+     * 手动回放消息取数据地址
      *
      * @return
      */
@@ -66,7 +66,7 @@ public class PersistenceFacadeApi {
     }
 
     /**
-     * 录制消息投递地址
+     * 手动录制消息投递地址
      *
      * @return
      */
@@ -76,7 +76,7 @@ public class PersistenceFacadeApi {
     }
 
     /**
-     * 回放结果投递地址
+     * 手动回放结果投递地址
      *
      * @return
      */
