@@ -211,7 +211,7 @@
                                                             #if($!replay.status.desc == '执行中')
                                                                 <span class="badge bg-primary">执行中</span>
                                                             #else
-                                                                #if($!replay.success)
+                                                                #if($replay.success)
                                                                         <span class="badge bg-success">成功</span>
                                                                     #else
                                                                         <span class="badge bg-danger">失败</span>
