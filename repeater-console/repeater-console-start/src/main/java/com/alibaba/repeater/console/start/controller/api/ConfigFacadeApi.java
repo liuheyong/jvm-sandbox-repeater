@@ -53,7 +53,7 @@ public class ConfigFacadeApi {
         //behaviors.add(new Behavior("hello.GreetingController", "greeting"));
         //config.setJavaEntranceBehaviors(behaviors);
         //List<Behavior> subBehaviors = Lists.newArrayList();
-        //// java调用插件
+        // java调用插件
         //config.setJavaSubInvokeBehaviors(subBehaviors);
         //config.setUseTtl(true);
         //return RepeaterResult.builder().success(true).message("operate success").data(config).build();
