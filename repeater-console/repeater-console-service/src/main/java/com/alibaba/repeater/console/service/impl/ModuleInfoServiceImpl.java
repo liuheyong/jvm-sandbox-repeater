@@ -69,9 +69,7 @@ public class ModuleInfoServiceImpl implements ModuleInfoService {
         if (CollectionUtils.isEmpty(byAppName)) {
             return ResultHelper.fail("data not exist");
         }
-        return ResultHelper.success(
-                byAppName.stream().map(moduleInfoConverter::convert).collect(Collectors.toList())
-        );
+        return ResultHelper.success(byAppName.stream().map(moduleInfoConverter::convert).collect(Collectors.toList()));
     }
 
     @Override
