@@ -41,7 +41,7 @@ public class ConfigFacadeApi {
         params.setEnvironment(env);
         RepeaterResult<ModuleConfigBO> result = moduleConfigService.query(params);
         return RepeaterResult.builder().success(result.isSuccess()).message(result.getMessage()).data(null == result.getData() ? null : result.getData().getConfigModel()).build();
-        //// 改为了可以适用于 gs-rest-service 的配置
+        /// 改为了可以适用于 gs-rest-service 的配置
         //RepeaterConfig config = new RepeaterConfig();
         //List<Behavior> behaviors = Lists.newArrayList();
         //config.setPluginIdentities(Lists.newArrayList("http", "java-entrance", "java-subInvoke", "mybatis", "ibatis"));
