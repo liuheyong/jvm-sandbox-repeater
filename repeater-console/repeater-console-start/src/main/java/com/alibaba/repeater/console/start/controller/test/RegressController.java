@@ -24,6 +24,7 @@ import java.util.List;
  * {@link RegressController} 持续回归demo服务
  * <p>
  * 回归服务，相当于一个示例的被测服务。官方的 slogan 例子用的就是这里的接口
+ *
  * @author zhaoyb1990
  */
 @RestController
@@ -32,7 +33,6 @@ public class RegressController {
 
     @Resource
     private RegressService regressService;
-
 
     /**
      * 单线程java示例
@@ -48,9 +48,8 @@ public class RegressController {
         if (partner.getData().equals(female) && male.equals(name)) {
             return "天哪!李雷和韩梅梅终于在一起了~";
         }
-        return  name + "成功匹配到小伙伴[" + partner.getData() + "]!";
+        return name + "成功匹配到小伙伴[" + partner.getData() + "]!";
     }
-
 
 
     /**
