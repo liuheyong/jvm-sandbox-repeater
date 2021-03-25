@@ -6,12 +6,7 @@ import com.alibaba.repeater.console.common.domain.PageResult;
 import com.alibaba.repeater.console.common.params.ModuleInfoParams;
 import com.alibaba.repeater.console.service.ModuleInfoService;
 import com.alibaba.repeater.console.start.controller.vo.PagerAdapter;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -23,58 +18,88 @@ import java.util.List;
  *
  * @author zhaoyb1990
  */
+@RestController
 @RequestMapping("/module")
-@Controller
 public class ModuleInfoController {
 
     @Resource
     private ModuleInfoService moduleInfoService;
 
-    @RequestMapping("list.htm")
-    public String list(@ModelAttribute("requestParams") ModuleInfoParams params, Model model) {
+    /**
+     * 在线模块->模块列表接口
+     *
+     * @Author: liuheyong
+     * @date: 2021/3/25
+     */
+    @RequestMapping("/list")
+    public RepeaterResult<PagerAdapter<ModuleInfoBO>> list(@RequestBody ModuleInfoParams params) {
         PageResult<ModuleInfoBO> result = moduleInfoService.query(params);
-        PagerAdapter.transform0(result, model);
-        return "module/list";
+        return RepeaterResult.builder().success(true).data(PagerAdapter.transform(result)).build();
     }
 
-    @ResponseBody
+    /**
+     * 在线模块->安装模块接口
+     *
+     * @Author: liuheyong
+     * @date: 2021/3/25
+     */
+    @RequestMapping("/install")
+    public RepeaterResult<String> install(@ModelAttribute("requestParams") ModuleInfoParams params) {
+        return moduleInfoService.install(params);
+    }
+
+    /**
+     * 在线模块->刷新接口
+     *
+     * @Author: liuheyong
+     * @date: 2021/3/25
+     */
+    @RequestMapping("/reload")
+    public RepeaterResult<String> reload(@ModelAttribute("requestParams") ModuleInfoParams params) {
+        return moduleInfoService.reload(params);
+    }
+
+    /**
+     * 在线模块->冻结接口
+     *
+     * @Author: liuheyong
+     * @date: 2021/3/25
+     */
+    @RequestMapping("/frozen")
+    public RepeaterResult<ModuleInfoBO> frozen(@ModelAttribute("requestParams") ModuleInfoParams params) {
+        return moduleInfoService.frozen(params);
+    }
+
+    /**
+     * 在线模块->激活接口
+     *
+     * @Author: liuheyong
+     * @date: 2021/3/25
+     */
+    @RequestMapping("/active")
+    public RepeaterResult<ModuleInfoBO> active(@ModelAttribute("requestParams") ModuleInfoParams params) {
+        return moduleInfoService.active(params);
+    }
+
+    /**
+     * 根据appName查询list【非对接接口】
+     *
+     * @Author: liuheyong
+     * @date: 2021/3/25
+     */
     @RequestMapping("/byName.json")
     public RepeaterResult<List<ModuleInfoBO>> list(@RequestParam("appName") String appName) {
         return moduleInfoService.query(appName);
     }
 
     /**
-     * 心跳上报配置
+     * 心跳上报配置【非对接接口】
      *
      * @return
      */
-    @ResponseBody
     @RequestMapping("/report.json")
     public RepeaterResult<ModuleInfoBO> list(@ModelAttribute("requestParams") ModuleInfoBO params) {
         return moduleInfoService.report(params);
     }
 
-    @ResponseBody
-    @RequestMapping("/active.json")
-    public RepeaterResult<ModuleInfoBO> active(@ModelAttribute("requestParams") ModuleInfoParams params) {
-        return moduleInfoService.active(params);
-    }
-
-    @ResponseBody
-    @RequestMapping("/frozen.json")
-    public RepeaterResult<ModuleInfoBO> frozen(@ModelAttribute("requestParams") ModuleInfoParams params) {
-        return moduleInfoService.frozen(params);
-    }
-
-    @ResponseBody
-    @RequestMapping("/install.json")
-    public RepeaterResult<String> install(@ModelAttribute("requestParams") ModuleInfoParams params) {
-        return moduleInfoService.install(params);
-    }
-
-    @ResponseBody
-    @RequestMapping("/reload.json")
-    public RepeaterResult<String> reload(@ModelAttribute("requestParams") ModuleInfoParams params) {
-        return moduleInfoService.reload(params);
-    }
 }

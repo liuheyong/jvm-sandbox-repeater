@@ -14,10 +14,16 @@ import lombok.ToString;
 @Setter
 @ToString
 public class RecordDetailBO extends RecordBO {
-
+    /**
+     * 请求参数JSON
+     */
     private String request;
-
+    /**
+     * 返回值JSON
+     */
     private String response;
-
+    /**
+     * 子调用记录
+     */
     private String subInvocations;
 }

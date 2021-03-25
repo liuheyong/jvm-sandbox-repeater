@@ -1,15 +1,24 @@
 package com.alibaba.jvm.sandbox.repeater.plugin.domain;
 
-
 /**
  * {@link RepeaterResult}
  * <p>
+ *
  * @author zhaoyb1990
  */
 public class RepeaterResult<T> {
 
+    /**
+     * 返回结果标识
+     */
     private boolean success;
+    /**
+     * 返回结果数据
+     */
     private T data;
+    /**
+     * 返回结果信息
+     */
     private String message;
 
     public static <T> Builder<T> builder() {

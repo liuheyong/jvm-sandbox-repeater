@@ -12,10 +12,10 @@ import com.alibaba.repeater.console.service.util.JacksonUtil;
 import com.alibaba.repeater.console.start.controller.vo.PagerAdapter;
 import com.google.common.collect.Lists;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -28,41 +28,69 @@ import java.util.List;
  * @author zhaoyb1990
  */
 @RequestMapping("/config")
-@Controller
+@RestController
 public class ModuleConfigController {
 
     @Resource
     private ModuleConfigService moduleConfigService;
 
-    @RequestMapping("list.htm")
-    public String list(@ModelAttribute("requestParams") ModuleConfigParams params, Model model) {
+    /**
+     * 配置管理->列表接口
+     *
+     * @Author: liuheyong
+     * @date: 2021/3/25
+     */
+    @RequestMapping("/list")
+    public RepeaterResult<PagerAdapter<ModuleConfigBO>> list(@RequestBody ModuleConfigParams params) {
         PageResult<ModuleConfigBO> result = moduleConfigService.list(params);
-        PagerAdapter.transform0(result, model);
-        return "config/list";
+        return RepeaterResult.builder().success(true).data(PagerAdapter.transform(result)).build();
     }
 
-    @RequestMapping("detail.htm")
-    public String detail(@ModelAttribute("requestParams") ModuleConfigParams params, Model model) {
+    /**
+     * 配置管理->详情接口
+     *
+     * @Author: liuheyong
+     * @date: 2021/3/25
+     */
+    @RequestMapping("/detail")
+    public RepeaterResult<ModuleConfigBO> detail(@RequestBody ModuleConfigParams params) {
         RepeaterResult<ModuleConfigBO> result = moduleConfigService.query(params);
         if (!result.isSuccess()) {
-            return "/error/404";
+            return RepeaterResult.builder().success(false).message("fail").build();
         }
-        model.addAttribute("config", result.getData().getConfig());
-        return "config/detail";
+        return result;
     }
 
-    @RequestMapping("edit.htm")
-    public String edit(@ModelAttribute("requestParams") ModuleConfigParams params, Model model) {
-        RepeaterResult<ModuleConfigBO> result = moduleConfigService.query(params);
-        if (!result.isSuccess()) {
-            return "/error/404";
-        }
-        model.addAttribute("config", result.getData().getConfig());
-        return "config/edit";
+    /**
+     * 配置管理->新增、修改接口
+     *
+     * @Author: liuheyong
+     * @date: 2021/3/25
+     */
+    @RequestMapping("/saveOrUpdate")
+    public RepeaterResult<ModuleConfigBO> saveOrUpdate(@RequestBody ModuleConfigParams params) {
+        return moduleConfigService.saveOrUpdate(params);
     }
 
-    @RequestMapping("add.htm")
-    public String add(Model model) {
+    /**
+     * 配置管理->配置推送接口
+     *
+     * @Author: liuheyong
+     * @date: 2021/3/25
+     */
+    @RequestMapping("/push")
+    public RepeaterResult<ModuleConfigBO> push(@RequestBody ModuleConfigParams params) {
+        return moduleConfigService.push(params);
+    }
+
+    /**
+     * 配置管理->新增时查询配置模板接口
+     *
+     * @Author: liuheyong
+     * @date: 2021/3/25
+     */
+    @RequestMapping("/add")
+    public RepeaterResult<String> add() {
         RepeaterConfig defaultConf = new RepeaterConfig();
         List<Behavior> behaviors = Lists.newArrayList();
         defaultConf.setPluginIdentities(Lists.newArrayList("http", "java-entrance", "java-subInvoke"));
@@ -75,24 +103,10 @@ public class ModuleConfigController {
         subBehaviors.add(new Behavior("com.alibaba.repeater.console.service.impl.RegressServiceImpl", "getRegressInner", "findPartner", "slogan"));
         defaultConf.setJavaSubInvokeBehaviors(subBehaviors);
         try {
-            model.addAttribute("config", JacksonUtil.serialize(defaultConf));
+            return RepeaterResult.builder().success(true).data(JacksonUtil.serialize(defaultConf)).build();
         } catch (SerializeException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "/error/404";
+            return RepeaterResult.builder().success(false).message("fail").build();
         }
-        return "config/add";
-    }
-
-    @RequestMapping("saveOrUpdate.json")
-    @ResponseBody
-    public RepeaterResult<ModuleConfigBO> doAdd(@ModelAttribute("requestParams") ModuleConfigParams params) {
-        return moduleConfigService.saveOrUpdate(params);
-    }
-
-    @RequestMapping("push.json")
-    @ResponseBody
-    public RepeaterResult<ModuleConfigBO> push(@ModelAttribute("requestParams") ModuleConfigParams params) {
-        return moduleConfigService.push(params);
     }
 
 }

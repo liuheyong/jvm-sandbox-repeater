@@ -15,23 +15,41 @@ import java.util.Date;
 @Getter
 @Setter
 public class ModuleInfoBO extends BaseBO {
-
+    /**
+     * 主键
+     */
     private Long id;
-
+    /**
+     * 创建时间
+     */
     private Date gmtCreate;
-
+    /**
+     * 修改时间
+     */
     private Date gmtModified;
-
+    /**
+     * 应用名
+     */
     private String appName;
-
+    /**
+     * 环境信息
+     */
     private String environment;
-
+    /**
+     * 机器IP
+     */
     private String ip;
-
+    /**
+     * 端口
+     */
     private String port;
-
+    /**
+     * 模块版本号
+     */
     private String version;
-
+    /**
+     * 模块状态
+     */
     private ModuleStatus status;
 
     @Override

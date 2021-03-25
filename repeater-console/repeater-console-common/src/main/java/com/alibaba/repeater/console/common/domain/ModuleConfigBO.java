@@ -16,18 +16,33 @@ import java.util.Date;
 @Setter
 public class ModuleConfigBO extends BaseBO {
 
+    /**
+     * 应用名
+     */
     private Long id;
-
+    /**
+     * 应用名
+     */
     private Date gmtCreate;
-
+    /**
+     * 应用名
+     */
     private Date gmtModified;
-
+    /**
+     * 应用名
+     */
     private String appName;
-
+    /**
+     * 应用名
+     */
     private String environment;
-
+    /**
+     * 应用名
+     */
     private RepeaterConfig configModel;
-
+    /**
+     * 应用名
+     */
     private String config;
 
     @Override

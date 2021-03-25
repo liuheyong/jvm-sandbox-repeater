@@ -18,24 +18,54 @@ import java.util.Map;
  * @author yuebing.zyb@alibaba-inc.com 2018/11/23 15:49.
  */
 public class PagerAdapter<T> {
+    /**
+     * 总页数
+     */
     private long total;
+    /**
+     * 当前页码
+     */
     private long currentPage;
+    /**
+     * 前一页页码
+     */
     private long previous;
+    /**
+     * 后一页页码
+     */
     private long next;
-    private long count;
+    /**
+     * 总数
+     */
+    //private long count;
+    /**
+     * 是否有前一页
+     */
     private boolean hasPrevious;
+    /**
+     * 是否有后一页
+     */
     private boolean hasNext;
+    /**
+     * 构造url
+     */
     private String url;
+    /**
+     * 分页数据
+     */
     private List<T> content;
+    /**
+     * 底部页码tap
+     */
     private List<Integer> pages;
 
     public static <T> PagerAdapter<T> transform(@NotNull PageResult<T> result) {
         PagerAdapter<T> pager = new PagerAdapter<>();
         pager.setTotal(result.getTotalPage());
+        pager.setCurrentPage(result.getPageIndex());
         pager.setContent(result.getData());
         pager.setHasNext(result.hasNext());
         pager.setHasPrevious(result.hasPrevious());
-        pager.setCurrentPage(result.getPageIndex());
         pager.setPages(buildPageNo(result.getPageIndex().intValue(), result.getTotalPage().intValue()));
         pager.setUrl(buildUrl("page"));
         return pager;
@@ -79,13 +109,11 @@ public class PagerAdapter<T> {
             builder.append("?");
         }
         Map<String, String[]> paramMap = getServletReq().getParameterMap();
-        for (Map.Entry<String, String[]> entry :
-                paramMap.entrySet()) {
+        for (Map.Entry<String, String[]> entry : paramMap.entrySet()) {
             if (entry.getKey().equals(key)) {
                 continue;
             }
-            for (String value :
-                    entry.getValue()) {
+            for (String value : entry.getValue()) {
                 builder.append(entry.getKey())
                         .append("=")
                         .append(value)
@@ -139,13 +167,13 @@ public class PagerAdapter<T> {
         this.currentPage = currentPage;
     }
 
-    public long getCount() {
-        return count;
-    }
-
-    public void setCount(long count) {
-        this.count = count;
-    }
+    //public long getCount() {
+    //    return count;
+    //}
+    //
+    //public void setCount(long count) {
+    //    this.count = count;
+    //}
 
     public boolean isHasNext() {
         return hasNext;
@@ -178,4 +206,5 @@ public class PagerAdapter<T> {
     public void setPages(List<Integer> pages) {
         this.pages = pages;
     }
+
 }

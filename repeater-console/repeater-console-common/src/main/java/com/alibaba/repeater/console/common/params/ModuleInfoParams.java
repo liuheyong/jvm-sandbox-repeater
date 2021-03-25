@@ -13,5 +13,8 @@ import lombok.Setter;
 @Setter
 public class ModuleInfoParams extends BaseParams {
 
+    /**
+     * 机器IP
+     */
     private String ip;
 }

@@ -12,8 +12,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * {@link PersistenceFacadeApi} Demo工程；作为repeater录制回放的数据存储
- * <p>
+ * {@link PersistenceFacadeApi} Demo工程；console为repeater提供的录制回放的相关接口
  *
  * @author zhaoyb1990
  */

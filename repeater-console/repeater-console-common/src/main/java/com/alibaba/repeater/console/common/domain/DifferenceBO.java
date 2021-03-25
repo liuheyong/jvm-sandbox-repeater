@@ -12,10 +12,21 @@ import lombok.Setter;
 @Getter
 @Setter
 public class DifferenceBO extends BaseBO {
-
+    /**
+     * 之际值
+     */
     private String actual;
+    /**
+     * 期望值
+     */
     private String expect;
+    /**
+     * 类型
+     */
     private String type;
+    /**
+     * 节点名称
+     */
     private String nodeName;
 
     @Override

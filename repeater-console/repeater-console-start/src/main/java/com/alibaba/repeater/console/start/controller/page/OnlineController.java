@@ -7,10 +7,9 @@ import com.alibaba.repeater.console.common.domain.RecordDetailBO;
 import com.alibaba.repeater.console.common.params.RecordParams;
 import com.alibaba.repeater.console.service.RecordService;
 import com.alibaba.repeater.console.start.controller.vo.PagerAdapter;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
@@ -21,27 +20,37 @@ import javax.annotation.Resource;
  *
  * @author zhaoyb1990
  */
-@Controller
+@RestController
 @RequestMapping("/online")
 public class OnlineController {
 
     @Resource
     private RecordService recordService;
 
-    @RequestMapping("search.htm")
-    public String search(@ModelAttribute("requestParams") RecordParams params, Model model) {
+    /**
+     * 在线列表接口
+     *
+     * @Author: liuheyong
+     * @date: 2021/3/25
+     */
+    @RequestMapping("/online_list")
+    public RepeaterResult<PagerAdapter<RecordBO>> search(@RequestBody RecordParams params) {
         PageResult<RecordBO> result = recordService.query(params);
-        PagerAdapter.transform0(result, model);
-        return "online/search";
+        return RepeaterResult.builder().success(true).data(PagerAdapter.transform(result)).build();
     }
 
-    @RequestMapping("detail.htm")
-    public String detail(@ModelAttribute("requestParams") RecordParams params, Model model) {
+    /**
+     * 在线详情接口
+     *
+     * @Author: liuheyong
+     * @date: 2021/3/25
+     */
+    @RequestMapping("/online_detail")
+    public RepeaterResult<RecordDetailBO> detail(@RequestBody RecordParams params) {
         RepeaterResult<RecordDetailBO> result = recordService.getDetail(params);
         if (!result.isSuccess()) {
-            return "/error/404";
+            return RepeaterResult.builder().success(false).message("fail").build();
         }
-        model.addAttribute("record", result.getData());
-        return "online/detail";
+        return result;
     }
 }

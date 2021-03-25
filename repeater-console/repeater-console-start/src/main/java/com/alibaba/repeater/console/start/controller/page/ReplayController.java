@@ -4,39 +4,51 @@ import com.alibaba.jvm.sandbox.repeater.plugin.domain.RepeaterResult;
 import com.alibaba.repeater.console.common.domain.ReplayBO;
 import com.alibaba.repeater.console.common.params.ReplayParams;
 import com.alibaba.repeater.console.service.ReplayService;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
 /**
  * {@link ReplayController}
+ * <p></>
+ * 回放相关接口
+ *
  * @author zhaoyb1990
  */
-@Controller
+@RestController
 @RequestMapping("/replay")
 public class ReplayController {
 
     @Resource
     private ReplayService replayService;
 
-    @RequestMapping("detail.htm")
-    public String detail(@ModelAttribute("requestParams") ReplayParams params, Model model) {
+    /**
+     * 回放详情接口
+     *
+     * @Author: liuheyong
+     * @date: 2021/3/25
+     */
+    @PostMapping("/replay_detail")
+    public RepeaterResult<ReplayBO> detail(@RequestBody ReplayParams params) {
         RepeaterResult<ReplayBO> result = replayService.query(params);
         if (!result.isSuccess()) {
-            return "/error/404";
+            return RepeaterResult.builder().success(false).message("fail").build();
         }
-        model.addAttribute("replay", result.getData());
-        model.addAttribute("record", result.getData().getRecord());
-        return "replay/detail";
+        return result;
     }
 
-    @RequestMapping("execute.json")
-    @ResponseBody
-    public RepeaterResult<String> replay(@ModelAttribute("requestParams") ReplayParams params) {
+    /**
+     * 回放接口
+     *
+     * @Author: liuheyong
+     * @date: 2021/3/25
+     */
+    @PostMapping("/do_replay")
+    public RepeaterResult<String> replay(@Validated @RequestBody ReplayParams params) {
         return replayService.replay(params);
     }
 }
