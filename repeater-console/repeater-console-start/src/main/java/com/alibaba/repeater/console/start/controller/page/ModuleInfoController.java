@@ -44,7 +44,7 @@ public class ModuleInfoController {
      * @date: 2021/3/25
      */
     @PostMapping("/install")
-    public RepeaterResult<String> install(@ModelAttribute("requestParams") ModuleInfoParams params) {
+    public RepeaterResult<String> install(@RequestBody ModuleInfoParams params) {
         return moduleInfoService.install(params);
     }
 
@@ -55,7 +55,7 @@ public class ModuleInfoController {
      * @date: 2021/3/25
      */
     @PostMapping("/reload")
-    public RepeaterResult<String> reload(@ModelAttribute("requestParams") ModuleInfoParams params) {
+    public RepeaterResult<String> reload(@RequestBody ModuleInfoParams params) {
         return moduleInfoService.reload(params);
     }
 
@@ -66,7 +66,7 @@ public class ModuleInfoController {
      * @date: 2021/3/25
      */
     @PostMapping("/frozen")
-    public RepeaterResult<ModuleInfoBO> frozen(@ModelAttribute("requestParams") ModuleInfoParams params) {
+    public RepeaterResult<ModuleInfoBO> frozen(@RequestBody ModuleInfoParams params) {
         return moduleInfoService.frozen(params);
     }
 
@@ -77,7 +77,7 @@ public class ModuleInfoController {
      * @date: 2021/3/25
      */
     @PostMapping("/active")
-    public RepeaterResult<ModuleInfoBO> active(@ModelAttribute("requestParams") ModuleInfoParams params) {
+    public RepeaterResult<ModuleInfoBO> active(@RequestBody ModuleInfoParams params) {
         return moduleInfoService.active(params);
     }
 
