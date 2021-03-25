@@ -12,10 +12,7 @@ import com.alibaba.repeater.console.service.util.JacksonUtil;
 import com.alibaba.repeater.console.start.controller.vo.PagerAdapter;
 import com.google.common.collect.Lists;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -40,7 +37,7 @@ public class ModuleConfigController {
      * @Author: liuheyong
      * @date: 2021/3/25
      */
-    @RequestMapping("/list")
+    @PostMapping("/list")
     public RepeaterResult<PagerAdapter<ModuleConfigBO>> list(@RequestBody ModuleConfigParams params) {
         PageResult<ModuleConfigBO> result = moduleConfigService.list(params);
         return RepeaterResult.builder().success(true).data(PagerAdapter.transform(result)).build();
@@ -52,7 +49,7 @@ public class ModuleConfigController {
      * @Author: liuheyong
      * @date: 2021/3/25
      */
-    @RequestMapping("/detail")
+    @PostMapping("/detail")
     public RepeaterResult<ModuleConfigBO> detail(@RequestBody ModuleConfigParams params) {
         RepeaterResult<ModuleConfigBO> result = moduleConfigService.query(params);
         if (!result.isSuccess()) {
@@ -67,7 +64,7 @@ public class ModuleConfigController {
      * @Author: liuheyong
      * @date: 2021/3/25
      */
-    @RequestMapping("/saveOrUpdate")
+    @PostMapping("/saveOrUpdate")
     public RepeaterResult<ModuleConfigBO> saveOrUpdate(@RequestBody ModuleConfigParams params) {
         return moduleConfigService.saveOrUpdate(params);
     }
@@ -78,7 +75,7 @@ public class ModuleConfigController {
      * @Author: liuheyong
      * @date: 2021/3/25
      */
-    @RequestMapping("/push")
+    @PostMapping("/push")
     public RepeaterResult<ModuleConfigBO> push(@RequestBody ModuleConfigParams params) {
         return moduleConfigService.push(params);
     }
@@ -89,7 +86,7 @@ public class ModuleConfigController {
      * @Author: liuheyong
      * @date: 2021/3/25
      */
-    @RequestMapping("/add")
+    @PostMapping("/add")
     public RepeaterResult<String> add() {
         RepeaterConfig defaultConf = new RepeaterConfig();
         List<Behavior> behaviors = Lists.newArrayList();

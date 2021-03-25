@@ -31,7 +31,7 @@ public class ModuleInfoController {
      * @Author: liuheyong
      * @date: 2021/3/25
      */
-    @RequestMapping("/list")
+    @PostMapping("/list")
     public RepeaterResult<PagerAdapter<ModuleInfoBO>> list(@RequestBody ModuleInfoParams params) {
         PageResult<ModuleInfoBO> result = moduleInfoService.query(params);
         return RepeaterResult.builder().success(true).data(PagerAdapter.transform(result)).build();
@@ -43,7 +43,7 @@ public class ModuleInfoController {
      * @Author: liuheyong
      * @date: 2021/3/25
      */
-    @RequestMapping("/install")
+    @PostMapping("/install")
     public RepeaterResult<String> install(@ModelAttribute("requestParams") ModuleInfoParams params) {
         return moduleInfoService.install(params);
     }
@@ -54,7 +54,7 @@ public class ModuleInfoController {
      * @Author: liuheyong
      * @date: 2021/3/25
      */
-    @RequestMapping("/reload")
+    @PostMapping("/reload")
     public RepeaterResult<String> reload(@ModelAttribute("requestParams") ModuleInfoParams params) {
         return moduleInfoService.reload(params);
     }
@@ -65,7 +65,7 @@ public class ModuleInfoController {
      * @Author: liuheyong
      * @date: 2021/3/25
      */
-    @RequestMapping("/frozen")
+    @PostMapping("/frozen")
     public RepeaterResult<ModuleInfoBO> frozen(@ModelAttribute("requestParams") ModuleInfoParams params) {
         return moduleInfoService.frozen(params);
     }
@@ -76,7 +76,7 @@ public class ModuleInfoController {
      * @Author: liuheyong
      * @date: 2021/3/25
      */
-    @RequestMapping("/active")
+    @PostMapping("/active")
     public RepeaterResult<ModuleInfoBO> active(@ModelAttribute("requestParams") ModuleInfoParams params) {
         return moduleInfoService.active(params);
     }
