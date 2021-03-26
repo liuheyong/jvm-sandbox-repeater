@@ -5,10 +5,7 @@ import com.alibaba.repeater.console.common.domain.ReplayBO;
 import com.alibaba.repeater.console.common.params.ReplayParams;
 import com.alibaba.repeater.console.service.ReplayService;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -19,6 +16,7 @@ import javax.annotation.Resource;
  *
  * @author zhaoyb1990
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/replay")
 public class ReplayController {

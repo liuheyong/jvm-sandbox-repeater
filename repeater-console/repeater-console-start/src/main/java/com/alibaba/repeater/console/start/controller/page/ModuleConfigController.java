@@ -24,6 +24,7 @@ import java.util.List;
  *
  * @author zhaoyb1990
  */
+@CrossOrigin
 @RequestMapping("/config")
 @RestController
 public class ModuleConfigController {
