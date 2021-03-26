@@ -16,7 +16,6 @@ import javax.annotation.Resource;
  *
  * @author zhaoyb1990
  */
-@CrossOrigin
 @RestController
 @RequestMapping("/replay")
 public class ReplayController {

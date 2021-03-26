@@ -18,7 +18,6 @@ import java.util.List;
  *
  * @author zhaoyb1990
  */
-@CrossOrigin
 @RestController
 @RequestMapping("/module")
 public class ModuleInfoController {

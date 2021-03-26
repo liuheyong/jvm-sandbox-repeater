@@ -18,7 +18,6 @@ import javax.annotation.Resource;
  *
  * @author zhaoyb1990
  */
-@CrossOrigin
 @RestController
 @RequestMapping("/online")
 public class OnlineController {
