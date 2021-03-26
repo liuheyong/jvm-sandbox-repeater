@@ -7,9 +7,11 @@ import com.alibaba.repeater.console.common.domain.RecordDetailBO;
 import com.alibaba.repeater.console.common.params.RecordParams;
 import com.alibaba.repeater.console.service.RecordService;
 import com.alibaba.repeater.console.start.controller.vo.PagerAdapter;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 
 /**
  * {@link OnlineController}
@@ -35,6 +37,9 @@ public class OnlineController {
     @PostMapping("/online_list")
     public RepeaterResult<PagerAdapter<RecordBO>> search(@RequestBody RecordParams params) {
         PageResult<RecordBO> result = recordService.query(params);
+        if (CollectionUtils.isEmpty(result.getData())) {
+            return RepeaterResult.builder().success(true).data(new ArrayList<>()).build();
+        }
         return RepeaterResult.builder().success(true).data(PagerAdapter.transform(result)).build();
     }
 

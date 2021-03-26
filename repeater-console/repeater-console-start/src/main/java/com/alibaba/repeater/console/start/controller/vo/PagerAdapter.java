@@ -37,7 +37,7 @@ public class PagerAdapter<T> {
     /**
      * 总数
      */
-    //private long count;
+    private long count;
     /**
      * 是否有前一页
      */
@@ -66,6 +66,7 @@ public class PagerAdapter<T> {
         pager.setContent(result.getData());
         pager.setHasNext(result.hasNext());
         pager.setHasPrevious(result.hasPrevious());
+        pager.setCount(result.getCount());
         pager.setPages(buildPageNo(result.getPageIndex().intValue(), result.getTotalPage().intValue()));
         pager.setUrl(buildUrl("page"));
         return pager;
@@ -167,13 +168,13 @@ public class PagerAdapter<T> {
         this.currentPage = currentPage;
     }
 
-    //public long getCount() {
-    //    return count;
-    //}
-    //
-    //public void setCount(long count) {
-    //    this.count = count;
-    //}
+    public long getCount() {
+        return count;
+    }
+
+    public void setCount(long count) {
+        this.count = count;
+    }
 
     public boolean isHasNext() {
         return hasNext;

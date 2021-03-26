@@ -11,10 +11,11 @@ import com.alibaba.repeater.console.service.ModuleConfigService;
 import com.alibaba.repeater.console.service.util.JacksonUtil;
 import com.alibaba.repeater.console.start.controller.vo.PagerAdapter;
 import com.google.common.collect.Lists;
-import org.springframework.stereotype.Controller;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,6 +42,9 @@ public class ModuleConfigController {
     @PostMapping("/list")
     public RepeaterResult<PagerAdapter<ModuleConfigBO>> list(@RequestBody ModuleConfigParams params) {
         PageResult<ModuleConfigBO> result = moduleConfigService.list(params);
+        if (CollectionUtils.isEmpty(result.getData())) {
+            return RepeaterResult.builder().success(true).data(new ArrayList<>()).build();
+        }
         return RepeaterResult.builder().success(true).data(PagerAdapter.transform(result)).build();
     }
 

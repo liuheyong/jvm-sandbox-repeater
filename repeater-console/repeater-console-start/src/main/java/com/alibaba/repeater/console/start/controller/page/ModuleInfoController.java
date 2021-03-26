@@ -6,9 +6,11 @@ import com.alibaba.repeater.console.common.domain.PageResult;
 import com.alibaba.repeater.console.common.params.ModuleInfoParams;
 import com.alibaba.repeater.console.service.ModuleInfoService;
 import com.alibaba.repeater.console.start.controller.vo.PagerAdapter;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,6 +37,9 @@ public class ModuleInfoController {
     @PostMapping("/list")
     public RepeaterResult<PagerAdapter<ModuleInfoBO>> list(@RequestBody ModuleInfoParams params) {
         PageResult<ModuleInfoBO> result = moduleInfoService.query(params);
+        if (CollectionUtils.isEmpty(result.getData())) {
+            return RepeaterResult.builder().success(true).data(new ArrayList<>()).build();
+        }
         return RepeaterResult.builder().success(true).data(PagerAdapter.transform(result)).build();
     }
 
