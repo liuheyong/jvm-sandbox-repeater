@@ -10,6 +10,7 @@ import com.alibaba.repeater.console.dal.dao.ModuleInfoDao;
 import com.alibaba.repeater.console.dal.model.ModuleInfo;
 import com.alibaba.repeater.console.service.ModuleInfoService;
 import com.alibaba.repeater.console.service.convert.ModuleInfoConverter;
+import com.alibaba.repeater.console.service.util.EsUtil;
 import com.alibaba.repeater.console.service.util.ResultHelper;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -41,12 +42,11 @@ public class ModuleInfoServiceImpl implements ModuleInfoService {
     private String activeURI;
     @Value("${repeat.reload.url}")
     private String reloadURI;
-
     private static String installBash = "sh %s/sandbox/bin/sandbox.sh -p %s -P 8820";
-
     @Resource
     private ModuleInfoDao moduleInfoDao;
-
+    @Resource
+    private EsUtil esUtil;
     @Resource
     private ModuleInfoConverter moduleInfoConverter;
 
@@ -153,6 +153,8 @@ public class ModuleInfoServiceImpl implements ModuleInfoService {
 
     @Override
     public RepeaterResult<String> reload(ModuleInfoParams params) {
+        esUtil.save("feed_index", "FEED_TYPE", "esContentFeed", 12);
+
         System.out.println(reloadURI);
         ModuleInfo moduleInfo = moduleInfoDao.findByAppNameAndIp(params.getAppName(), params.getIp());
         if (moduleInfo == null) {
