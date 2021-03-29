@@ -33,10 +33,12 @@ import java.util.stream.Collectors;
 @Service("heartbeatService")
 public class ModuleInfoServiceImpl implements ModuleInfoService {
 
-    private static String activeURI = "http://%s:%s/sandbox/default/module/http/sandbox-module-mgr/active?ids=repeater";
-
-    private static String frozenURI = "http://%s:%s/sandbox/default/module/http/sandbox-module-mgr/frozen?ids=repeater";
-
+    //private static String activeURI = "http://%s:%s/sandbox/default/module/http/sandbox-module-mgr/active?ids=repeater";
+    //private static String frozenURI = "http://%s:%s/sandbox/default/module/http/sandbox-module-mgr/frozen?ids=repeater";
+    @Value("${frozen.uri}")
+    private String frozenURI;
+    @Value("${active.uri}")
+    private String activeURI;
     @Value("${repeat.reload.url}")
     private String reloadURI;
 
