@@ -25,6 +25,7 @@ public class ConvertUtil {
         record.setGmtCreate(new Date());
         record.setGmtRecord(new Date(wrapper.getTimestamp()));
         record.setHost(wrapper.getHost());
+        // TODO wenyixicodedog 扩展 traceId
         record.setTraceId(wrapper.getTraceId());
         Serializer hessian = SerializerProvider.instance().provide(Serializer.Type.HESSIAN);
         try {
