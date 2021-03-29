@@ -54,7 +54,7 @@ public class PersistenceFacadeApi {
     }
 
     /**
-     * 手动回放消息取数据地址
+     * 回放消息取record数据
      *
      * @return
      */
