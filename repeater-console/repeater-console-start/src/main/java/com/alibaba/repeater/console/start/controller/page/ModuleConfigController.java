@@ -12,7 +12,10 @@ import com.alibaba.repeater.console.service.util.JacksonUtil;
 import com.alibaba.repeater.console.start.controller.vo.PagerAdapter;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -25,7 +28,6 @@ import java.util.List;
  *
  * @author zhaoyb1990
  */
-@CrossOrigin
 @RestController
 @RequestMapping("/config")
 public class ModuleConfigController {

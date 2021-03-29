@@ -6,10 +6,12 @@ import com.alibaba.repeater.console.common.domain.PageResult;
 import com.alibaba.repeater.console.common.params.ModuleInfoParams;
 import com.alibaba.repeater.console.service.ModuleInfoService;
 import com.alibaba.repeater.console.start.controller.vo.PagerAdapter;
+import com.alibaba.repeater.console.start.util.IpUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +22,6 @@ import java.util.List;
  *
  * @author zhaoyb1990
  */
-@CrossOrigin
 @RestController
 @RequestMapping("/module")
 public class ModuleInfoController {
@@ -104,7 +105,8 @@ public class ModuleInfoController {
      * @return
      */
     @RequestMapping("/report.json")
-    public RepeaterResult<ModuleInfoBO> list(@ModelAttribute("requestParams") ModuleInfoBO params) {
+    public RepeaterResult<ModuleInfoBO> list(@ModelAttribute("requestParams") ModuleInfoBO params, HttpServletRequest request) {
+        params.setIp(IpUtil.getIp(request));
         return moduleInfoService.report(params);
     }
 

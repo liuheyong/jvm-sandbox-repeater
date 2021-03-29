@@ -8,7 +8,10 @@ import com.alibaba.repeater.console.common.params.RecordParams;
 import com.alibaba.repeater.console.service.RecordService;
 import com.alibaba.repeater.console.start.controller.vo.PagerAdapter;
 import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -20,7 +23,6 @@ import java.util.ArrayList;
  *
  * @author zhaoyb1990
  */
-@CrossOrigin
 @RestController
 @RequestMapping("/online")
 public class OnlineController {
