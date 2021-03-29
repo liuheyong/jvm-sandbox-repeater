@@ -66,6 +66,38 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-csv</artifactId>
         </dependency>
+        <!--================    es    ==============-->
+        <dependency>
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>elasticsearch</artifactId>
+            <version>6.6.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-client</artifactId>
+            <version>6.6.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.elasticsearch.plugin</groupId>
+            <artifactId>aggs-matrix-stats-client</artifactId>
+            <version>6.6.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.elasticsearch.plugin</groupId>
+            <artifactId>rank-eval-client</artifactId>
+            <version>6.6.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.elasticsearch.plugin</groupId>
+            <artifactId>lang-mustache-client</artifactId>
+            <version>6.6.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <!--================    es  ==============-->
     </dependencies>
 
     <build>

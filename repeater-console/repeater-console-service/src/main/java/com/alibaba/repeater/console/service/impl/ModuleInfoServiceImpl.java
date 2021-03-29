@@ -153,6 +153,7 @@ public class ModuleInfoServiceImpl implements ModuleInfoService {
 
     @Override
     public RepeaterResult<String> reload(ModuleInfoParams params) {
+        System.out.println(reloadURI);
         ModuleInfo moduleInfo = moduleInfoDao.findByAppNameAndIp(params.getAppName(), params.getIp());
         if (moduleInfo == null) {
             return ResultHelper.fail("data not exist");
