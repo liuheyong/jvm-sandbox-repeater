@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
@@ -47,6 +48,23 @@ public class EsUtil {
             return response;
         } catch (Exception e) {
             log.error("插入数据失败", e);
+        }
+        return null;
+    }
+
+    /**
+     * 判断索引是否存在
+     *
+     * @Author: liuheyong
+     * @date: 2021/3/29
+     */
+    public Boolean indexExists(String indexName) {
+        try {
+            GetIndexRequest getIndexRequest = new GetIndexRequest();
+            getIndexRequest.indices(indexName);
+            return restHighLevelClient.indices().exists(getIndexRequest, RequestOptions.DEFAULT);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return null;
     }

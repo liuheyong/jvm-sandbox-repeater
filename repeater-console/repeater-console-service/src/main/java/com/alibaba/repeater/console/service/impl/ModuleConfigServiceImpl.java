@@ -21,6 +21,7 @@ import com.alibaba.repeater.console.service.convert.ModuleConfigConverter;
 import com.alibaba.repeater.console.service.util.EsUtil;
 import com.alibaba.repeater.console.service.util.JacksonUtil;
 import com.alibaba.repeater.console.service.util.ResultHelper;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -90,6 +91,10 @@ public class ModuleConfigServiceImpl implements ModuleConfigService {
             result.setCount(Long.valueOf(search2.size()));
             result.setTotalPage((search2.size() - 1) / params.getSize() + 1);
             result.setData(objectList.stream().map(moduleConfigConverter::convert).collect(Collectors.toList()));
+        } else {
+            result.setCount(0L);
+            result.setTotalPage(0);
+            result.setData(Lists.newArrayList());
         }
         result.setSuccess(true);
         result.setPageIndex(params.getPage());
@@ -99,6 +104,9 @@ public class ModuleConfigServiceImpl implements ModuleConfigService {
 
     @Override
     public RepeaterResult<ModuleConfigBO> query(ModuleConfigParams params) {
+        if (!esUtil.indexExists(Constant.ES_INDEX)) {
+            return ResultHelper.fail("no such index: " + Constant.ES_INDEX);
+        }
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
                 .timeout(new TimeValue(5, TimeUnit.SECONDS))
                 .query(QueryBuilders.termsQuery("appName", params.getAppName()))

@@ -14,6 +14,7 @@ import com.alibaba.repeater.console.service.ModuleInfoService;
 import com.alibaba.repeater.console.service.convert.ModuleInfoConverter;
 import com.alibaba.repeater.console.service.util.EsUtil;
 import com.alibaba.repeater.console.service.util.ResultHelper;
+import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.common.unit.TimeValue;
@@ -86,6 +87,10 @@ public class ModuleInfoServiceImpl implements ModuleInfoService {
             result.setCount(Long.valueOf(search2.size()));
             result.setTotalPage((search2.size() - 1) / params.getSize() + 1);
             result.setData(objectList.stream().map(moduleInfoConverter::convert).collect(Collectors.toList()));
+        } else {
+            result.setCount(0L);
+            result.setTotalPage(0);
+            result.setData(Lists.newArrayList());
         }
         result.setSuccess(true);
         result.setPageIndex(params.getPage());
