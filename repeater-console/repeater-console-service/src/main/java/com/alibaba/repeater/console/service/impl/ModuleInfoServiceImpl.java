@@ -61,6 +61,12 @@ public class ModuleInfoServiceImpl implements ModuleInfoService {
 
     @Override
     public PageResult<ModuleInfoBO> query(ModuleInfoParams params) {
+        if (!esUtil.indexExists(Constant.ES_INDEX)) {
+            PageResult<ModuleInfoBO> pageResult = new PageResult<>();
+            pageResult.setSuccess(false);
+            pageResult.setMessage("no such data: " + Constant.ES_INDEX);
+            return pageResult;
+        }
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
                 .from((params.getPage() - 1) * params.getSize())
                 .size(params.getSize())
@@ -100,20 +106,38 @@ public class ModuleInfoServiceImpl implements ModuleInfoService {
 
     @Override
     public RepeaterResult<List<ModuleInfoBO>> query(String appName) {
-        List<ModuleInfo> byAppName = moduleInfoDao.findByAppName(appName);
-        if (CollectionUtils.isEmpty(byAppName)) {
+        if (!esUtil.indexExists(Constant.ES_INDEX)) {
+            return ResultHelper.fail("no such data: " + Constant.ES_INDEX);
+        }
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
+                .timeout(new TimeValue(5, TimeUnit.SECONDS))
+                .query(QueryBuilders.termsQuery("appName", appName))
+                .sort(new ScoreSortBuilder().order(SortOrder.DESC));
+        List<Map<String, Object>> search = esUtil.search(Constant.ES_INDEX, Constant.MODULE_INFO_ES_TYPE, sourceBuilder);
+        List<ModuleInfo> objectList = search.stream()
+                .map(o -> BeanUtil.mapToBean(o, ModuleInfo.class, true))
+                .collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(objectList)) {
             return ResultHelper.fail("data not exist");
         }
-        return ResultHelper.success(byAppName.stream().map(moduleInfoConverter::convert).collect(Collectors.toList()));
+        return ResultHelper.success(objectList.stream().map(moduleInfoConverter::convert).collect(Collectors.toList()));
     }
 
     @Override
     public RepeaterResult<ModuleInfoBO> query(String appName, String ip) {
-        ModuleInfo moduleInfo = moduleInfoDao.findByAppNameAndIp(appName, ip);
-        if (moduleInfo == null) {
-            return RepeaterResult.builder().message("data not exist").build();
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
+                .timeout(new TimeValue(5, TimeUnit.SECONDS))
+                .query(QueryBuilders.termsQuery("appName", appName))
+                .query(QueryBuilders.termsQuery("ip", ip))
+                .sort(new ScoreSortBuilder().order(SortOrder.DESC));
+        List<Map<String, Object>> search = esUtil.search(Constant.ES_INDEX, Constant.MODULE_INFO_ES_TYPE, sourceBuilder);
+        List<ModuleInfo> objectList = search.stream()
+                .map(o -> BeanUtil.mapToBean(o, ModuleInfo.class, true))
+                .collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(objectList) || objectList.get(0) == null) {
+            return ResultHelper.fail("data not exist");
         }
-        return ResultHelper.success(moduleInfoConverter.convert(moduleInfo));
+        return ResultHelper.success(moduleInfoConverter.convert(objectList.get(0)));
     }
 
     @Override
@@ -121,7 +145,7 @@ public class ModuleInfoServiceImpl implements ModuleInfoService {
         ModuleInfo moduleInfo = moduleInfoConverter.reconvert(params);
         moduleInfo.setGmtModified(new Date());
         moduleInfo.setGmtCreate(new Date());
-        moduleInfoDao.save(moduleInfo);
+        esUtil.save(Constant.ES_INDEX, Constant.MODULE_INFO_ES_TYPE, moduleInfo.getGmtModified(), moduleInfo);
         return ResultHelper.success(moduleInfoConverter.convert(moduleInfo));
     }
 
@@ -186,26 +210,44 @@ public class ModuleInfoServiceImpl implements ModuleInfoService {
 
     @Override
     public RepeaterResult<String> reload(ModuleInfoParams params) {
-        ModuleInfo moduleInfo = moduleInfoDao.findByAppNameAndIp(params.getAppName(), params.getIp());
-        if (moduleInfo == null) {
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
+                .timeout(new TimeValue(5, TimeUnit.SECONDS))
+                .query(QueryBuilders.termsQuery("appName", params.getAppName()))
+                .query(QueryBuilders.termsQuery("ip", params.getIp()))
+                .sort(new ScoreSortBuilder().order(SortOrder.DESC));
+        List<Map<String, Object>> search = esUtil.search(Constant.ES_INDEX, Constant.MODULE_INFO_ES_TYPE, sourceBuilder);
+        List<ModuleInfo> objectList = search.stream()
+                .map(o -> BeanUtil.mapToBean(o, ModuleInfo.class, true))
+                .collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(objectList) || objectList.get(0) == null) {
             return ResultHelper.fail("data not exist");
         }
+        ModuleInfo moduleInfo = objectList.get(0);
         HttpUtil.Resp resp = HttpUtil.doGet(String.format(reloadURI, moduleInfo.getIp(), moduleInfo.getPort()));
         return ResultHelper.fs(resp.isSuccess());
     }
 
     private RepeaterResult<ModuleInfoBO> execute(String uri, ModuleInfoParams params, ModuleStatus finishStatus) {
-        ModuleInfo moduleInfo = moduleInfoDao.findByAppNameAndIp(params.getAppName(), params.getIp());
-        if (moduleInfo == null) {
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
+                .timeout(new TimeValue(5, TimeUnit.SECONDS))
+                .query(QueryBuilders.termsQuery("appName", params.getAppName()))
+                .query(QueryBuilders.termsQuery("ip", params.getIp()))
+                .sort(new ScoreSortBuilder().order(SortOrder.DESC));
+        List<Map<String, Object>> search = esUtil.search(Constant.ES_INDEX, Constant.MODULE_INFO_ES_TYPE, sourceBuilder);
+        List<ModuleInfo> objectList = search.stream()
+                .map(o -> BeanUtil.mapToBean(o, ModuleInfo.class, true))
+                .collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(objectList) || objectList.get(0) == null) {
             return ResultHelper.fail("data not exist");
         }
+        ModuleInfo moduleInfo = objectList.get(0);
         HttpUtil.Resp resp = HttpUtil.doGet(String.format(uri, moduleInfo.getIp(), moduleInfo.getPort()));
         if (!resp.isSuccess()) {
             return ResultHelper.fail(resp.getMessage());
         }
         moduleInfo.setStatus(finishStatus.name());
         moduleInfo.setGmtModified(new Date());
-        moduleInfoDao.saveAndFlush(moduleInfo);
+        esUtil.save(Constant.ES_INDEX, Constant.MODULE_INFO_ES_TYPE, moduleInfo.getGmtModified(), moduleInfo);
         return ResultHelper.success(moduleInfoConverter.convert(moduleInfo));
     }
 }

@@ -68,7 +68,7 @@ public class ModuleConfigServiceImpl implements ModuleConfigService {
         if (!esUtil.indexExists(Constant.ES_INDEX)) {
             PageResult<ModuleConfigBO> pageResult = new PageResult<>();
             pageResult.setSuccess(false);
-            pageResult.setMessage("no such index: " + Constant.ES_INDEX);
+            pageResult.setMessage("no such data: " + Constant.ES_INDEX);
             return pageResult;
         }
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
@@ -111,7 +111,7 @@ public class ModuleConfigServiceImpl implements ModuleConfigService {
     @Override
     public RepeaterResult<ModuleConfigBO> query(ModuleConfigParams params) {
         if (!esUtil.indexExists(Constant.ES_INDEX)) {
-            return ResultHelper.fail("no such index: " + Constant.ES_INDEX);
+            return ResultHelper.fail("no such data: " + Constant.ES_INDEX);
         }
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
                 .timeout(new TimeValue(5, TimeUnit.SECONDS))

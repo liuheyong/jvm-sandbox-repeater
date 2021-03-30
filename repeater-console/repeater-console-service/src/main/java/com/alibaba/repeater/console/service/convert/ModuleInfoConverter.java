@@ -6,7 +6,6 @@ import com.alibaba.repeater.console.dal.model.ModuleInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
-
 /**
  * {@link ModuleInfoConverter}
  * <p>
