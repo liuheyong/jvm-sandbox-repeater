@@ -42,7 +42,7 @@ public class Replay implements java.io.Serializable {
     private Integer status;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name="record_id")
+    @JoinColumn(name = "record_id")
     private Record record;
 
     /* callback to fill */

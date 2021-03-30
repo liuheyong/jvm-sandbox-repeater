@@ -30,7 +30,6 @@ public interface ModuleInfoRepository extends JpaRepository<ModuleInfo, Long>, J
      */
     List<ModuleInfo> findByAppName(String appName);
 
-
     @Modifying
     @Query(
             "update ModuleInfo set gmtModified =  :#{#moduleInfo.gmtModified}" +

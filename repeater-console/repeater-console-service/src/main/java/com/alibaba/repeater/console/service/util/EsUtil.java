@@ -1,6 +1,7 @@
 package com.alibaba.repeater.console.service.util;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.index.IndexRequest;
@@ -11,9 +12,9 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -27,11 +28,18 @@ import java.util.Map;
 @Component
 public class EsUtil {
 
-    @Autowired
+    @Resource
     private RestHighLevelClient restHighLevelClient;
 
-    public IndexResponse save(String indexName, String type, Object object, Object id) {
+    /**
+     * 插入es数据
+     *
+     * @Author: liuheyong
+     * @date: 2021/3/29
+     */
+    public IndexResponse save(String indexName, String type, Object id, Object object) {
         try {
+            log.info("插入es数据indexName:{}, type:{}, id:{}, object:{}", indexName, type, id, JSON.toJSONString(object));
             IndexRequest request = new IndexRequest("post");
             request.index(indexName).type(type).id(String.valueOf(id)).source(BeanUtil.beanToMap(object));
             IndexResponse response = restHighLevelClient.index(request, RequestOptions.DEFAULT);
@@ -43,11 +51,18 @@ public class EsUtil {
         return null;
     }
 
+    /**
+     * 查询es数据
+     *
+     * @Author: liuheyong
+     * @date: 2021/3/29
+     */
     public List<Map<String, Object>> search(String indexName, String type, SearchSourceBuilder searchSourceBuilder) {
         SearchRequest request = new SearchRequest();
         request.indices(indexName);
         request.types(type);
         request.source(searchSourceBuilder);
+        log.info("查询es数据 indexName：{}，type：{}，searchSourceBuilder：{}", indexName, type, searchSourceBuilder);
         SearchResponse response;
         List<Map<String, Object>> result = Lists.newArrayList();
         try {
@@ -58,6 +73,7 @@ public class EsUtil {
         } catch (IOException e) {
             log.error("查询失败", e);
         }
+        log.info("查询数据成功");
         return result;
     }
 

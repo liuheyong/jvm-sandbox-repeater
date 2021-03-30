@@ -14,7 +14,7 @@ public class IpUtil {
     private static final String UNKNOWN = "unknown";
 
     /**
-     * 获取ip地址
+     * 获取真实ip地址
      *
      * @param request
      * @return

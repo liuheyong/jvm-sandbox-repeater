@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-import java.lang.Exception;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +30,7 @@ public class JacksonUtil {
     }
 
     public static String serialize(Object object) throws SerializeException {
-        return serialize(object,true);
+        return serialize(object, true);
     }
 
     public static String serialize(Object object, boolean pretty) throws SerializeException {
