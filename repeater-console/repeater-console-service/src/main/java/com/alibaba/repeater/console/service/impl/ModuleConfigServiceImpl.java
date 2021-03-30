@@ -65,6 +65,12 @@ public class ModuleConfigServiceImpl implements ModuleConfigService {
 
     @Override
     public PageResult<ModuleConfigBO> list(ModuleConfigParams params) {
+        if (!esUtil.indexExists(Constant.ES_INDEX)) {
+            PageResult<ModuleConfigBO> pageResult = new PageResult<>();
+            pageResult.setSuccess(false);
+            pageResult.setMessage("no such index: " + Constant.ES_INDEX);
+            return pageResult;
+        }
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
                 .from((params.getPage() - 1) * params.getSize())
                 .size(params.getSize())
