@@ -1,5 +1,6 @@
 package com.alibaba.repeater.console.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.jvm.sandbox.repeater.aide.compare.Comparable;
 import com.alibaba.jvm.sandbox.repeater.aide.compare.ComparableFactory;
 import com.alibaba.jvm.sandbox.repeater.aide.compare.CompareResult;
@@ -12,6 +13,7 @@ import com.alibaba.jvm.sandbox.repeater.plugin.domain.RepeatMeta;
 import com.alibaba.jvm.sandbox.repeater.plugin.domain.RepeatModel;
 import com.alibaba.jvm.sandbox.repeater.plugin.domain.RepeaterResult;
 import com.alibaba.jvm.sandbox.repeater.plugin.spi.MockStrategy;
+import com.alibaba.repeater.console.common.constant.Constant;
 import com.alibaba.repeater.console.common.domain.ModuleInfoBO;
 import com.alibaba.repeater.console.common.domain.ReplayBO;
 import com.alibaba.repeater.console.common.domain.ReplayStatus;
@@ -25,18 +27,23 @@ import com.alibaba.repeater.console.service.ReplayService;
 import com.alibaba.repeater.console.service.convert.DifferenceConvert;
 import com.alibaba.repeater.console.service.convert.ReplayConverter;
 import com.alibaba.repeater.console.service.util.ConvertUtil;
+import com.alibaba.repeater.console.service.util.EsUtil;
 import com.alibaba.repeater.console.service.util.JacksonUtil;
 import com.alibaba.repeater.console.service.util.ResultHelper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.common.unit.TimeValue;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.ScoreSortBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -61,6 +68,8 @@ public class ReplayServiceImpl implements ReplayService {
     private ReplayConverter replayConverter;
     @Resource
     private DifferenceConvert differenceConvert;
+    @Resource
+    private EsUtil esUtil;
 
     @Override
     public RepeaterResult<String> replay(ReplayParams params) {
@@ -73,10 +82,20 @@ public class ReplayServiceImpl implements ReplayService {
         }
         params.setPort(result.getData().getPort());
         params.setEnvironment(result.getData().getEnvironment());
-        final Record record = recordDao.selectByAppNameAndTraceId(params.getAppName(), params.getTraceId());
-        if (record == null) {
-            return RepeaterResult.builder().success(false).message("data does not exist").build();
+
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
+                .timeout(new TimeValue(5, TimeUnit.SECONDS))
+                .query(QueryBuilders.termsQuery("appName", params.getAppName()))
+                .query(QueryBuilders.termsQuery("traceId", params.getTraceId()))
+                .sort(new ScoreSortBuilder().order(SortOrder.DESC));
+        List<Map<String, Object>> search = esUtil.search(Constant.ES_INDEX, Constant.RECORD_ES_TYPE, sourceBuilder);
+        List<Record> objectList = search.stream()
+                .map(o -> BeanUtil.mapToBean(o, Record.class, true))
+                .collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(objectList) || objectList.get(0) == null) {
+            return ResultHelper.fail("data not exist");
         }
+        final Record record = objectList.get(0);
         if (StringUtils.isEmpty(params.getRepeatId())) {
             params.setRepeatId(TraceGenerator.generate());
         }
@@ -98,7 +117,18 @@ public class ReplayServiceImpl implements ReplayService {
             return RepeaterResult.builder().message("operate failed").build();
         }
         // this process must handle by async
-        Replay replay = replayDao.findByRepeatId(rm.getRepeatId());
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
+                .timeout(new TimeValue(5, TimeUnit.SECONDS))
+                .query(QueryBuilders.termsQuery("repeatId", rm.getRepeatId()))
+                .sort(new ScoreSortBuilder().order(SortOrder.DESC));
+        List<Map<String, Object>> search = esUtil.search(Constant.ES_INDEX, Constant.RECORD_ES_TYPE, sourceBuilder);
+        List<Replay> objectList = search.stream()
+                .map(o -> BeanUtil.mapToBean(o, Replay.class, true))
+                .collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(objectList) || objectList.get(0) == null) {
+            return ResultHelper.fail("data not exist");
+        }
+        Replay replay = objectList.get(0);
         replay.setStatus(rm.isFinish() ? ReplayStatus.FINISH.getStatus() : ReplayStatus.FAILED.getStatus());
         replay.setTraceId(rm.getTraceId());
         replay.setCost(rm.getCost());
@@ -139,17 +169,24 @@ public class ReplayServiceImpl implements ReplayService {
             log.error("error occurred serialize diff result", e);
             return RepeaterResult.builder().message("operate failed").build();
         }
-        Replay callBack = replayDao.saveAndFlush(replay);
+        esUtil.save(Constant.ES_INDEX, Constant.REPLAY_ES_TYPE, replay.getGmtModified(), replay);
         return RepeaterResult.builder().success(true).message("operate success").data("-/-").build();
     }
 
     @Override
     public RepeaterResult<ReplayBO> query(ReplayParams params) {
-        Replay replay = replayDao.findByRepeatId(params.getRepeatId());
-        if (replay == null) {
-            return RepeaterResult.builder().message("data not exist").build();
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
+                .timeout(new TimeValue(5, TimeUnit.SECONDS))
+                .query(QueryBuilders.termsQuery("repeatId", params.getRepeatId()))
+                .sort(new ScoreSortBuilder().order(SortOrder.DESC));
+        List<Map<String, Object>> search = esUtil.search(Constant.ES_INDEX, Constant.RECORD_ES_TYPE, sourceBuilder);
+        List<Replay> objectList = search.stream()
+                .map(o -> BeanUtil.mapToBean(o, Replay.class, true))
+                .collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(objectList) || objectList.get(0) == null) {
+            return ResultHelper.fail("data not exist");
         }
-        return RepeaterResult.builder().success(true).data(replayConverter.convert(replay)).build();
+        return RepeaterResult.builder().success(true).data(replayConverter.convert(objectList.get(0))).build();
     }
 
     private RepeaterResult<String> doRepeat(Record record, ReplayParams params) {
@@ -159,7 +196,7 @@ public class ReplayServiceImpl implements ReplayService {
         meta.setMock(params.isMock());
         meta.setRepeatId(params.getRepeatId());
         meta.setStrategyType(MockStrategy.StrategyType.PARAMETER_MATCH);
-        Map<String, String> requestParams = new HashMap<String, String>(2);
+        Map<String, String> requestParams = new HashMap<>(2);
         try {
             requestParams.put(Constants.DATA_TRANSPORT_IDENTIFY, SerializerWrapper.hessianSerialize(meta));
         } catch (SerializeException e) {
@@ -183,6 +220,7 @@ public class ReplayServiceImpl implements ReplayService {
         replay.setGmtModified(new Date());
         replay.setStatus(ReplayStatus.PROCESSING.getStatus());
         // 冗余了一个repeatID，实际可以直接使用replay#id
-        return replayDao.save(replay);
+        esUtil.save(Constant.ES_INDEX, Constant.REPLAY_ES_TYPE, replay.getGmtModified(), replay);
+        return replay;
     }
 }
