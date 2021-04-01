@@ -24,6 +24,12 @@
         <encoder>
             <pattern>${PATTERN}</pattern>
         </encoder>
+        <!-- 过滤器，可以过滤掉不符合条件的日志，INFO及以上的日志被处理，其它的拒绝 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
     </appender>
     <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${FILE_PATH}/repeater-console-error.log</file> <!-- 日志名称 -->
@@ -37,6 +43,12 @@
         <encoder>
             <pattern>${PATTERN}</pattern>
         </encoder>
+        <!-- 过滤器，可以过滤掉不符合条件的日志，ERROR及以上的日志被处理，其它的拒绝 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
     </appender>
 
     <root level="info">
