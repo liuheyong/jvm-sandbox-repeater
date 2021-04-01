@@ -142,7 +142,9 @@ public class ModuleInfoServiceImpl implements ModuleInfoService {
         ModuleInfo moduleInfo = moduleInfoConverter.reconvert(params);
         moduleInfo.setGmtModified(new Date());
         moduleInfo.setGmtCreate(new Date());
-        esUtil.save(Constant.ES_INDEX, Constant.MODULE_INFO_ES_TYPE, moduleInfo.getGmtModified(), moduleInfo);
+        if (!esUtil.indexExists(Constant.ES_INDEX)) {
+            esUtil.save(Constant.ES_INDEX, Constant.MODULE_INFO_ES_TYPE, moduleInfo.getGmtModified(), moduleInfo);
+        }
         return ResultHelper.success(moduleInfoConverter.convert(moduleInfo));
     }
 
