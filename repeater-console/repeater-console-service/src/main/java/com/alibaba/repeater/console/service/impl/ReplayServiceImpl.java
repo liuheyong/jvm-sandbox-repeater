@@ -17,11 +17,9 @@ import com.alibaba.repeater.console.common.constant.Constant;
 import com.alibaba.repeater.console.common.domain.ModuleInfoBO;
 import com.alibaba.repeater.console.common.domain.ReplayBO;
 import com.alibaba.repeater.console.common.domain.ReplayStatus;
+import com.alibaba.repeater.console.common.model.Record;
+import com.alibaba.repeater.console.common.model.Replay;
 import com.alibaba.repeater.console.common.params.ReplayParams;
-import com.alibaba.repeater.console.dal.dao.RecordDao;
-import com.alibaba.repeater.console.dal.dao.ReplayDao;
-import com.alibaba.repeater.console.dal.model.Record;
-import com.alibaba.repeater.console.dal.model.Replay;
 import com.alibaba.repeater.console.service.ModuleInfoService;
 import com.alibaba.repeater.console.service.ReplayService;
 import com.alibaba.repeater.console.service.convert.DifferenceConvert;
@@ -60,10 +58,6 @@ public class ReplayServiceImpl implements ReplayService {
     private String repeatURL;
     @Resource
     private ModuleInfoService moduleInfoService;
-    @Resource
-    private RecordDao recordDao;
-    @Resource
-    private ReplayDao replayDao;
     @Resource
     private ReplayConverter replayConverter;
     @Resource

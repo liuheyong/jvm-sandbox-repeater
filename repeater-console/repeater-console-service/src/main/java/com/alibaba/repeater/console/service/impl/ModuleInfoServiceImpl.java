@@ -7,9 +7,8 @@ import com.alibaba.repeater.console.common.constant.Constant;
 import com.alibaba.repeater.console.common.domain.ModuleInfoBO;
 import com.alibaba.repeater.console.common.domain.ModuleStatus;
 import com.alibaba.repeater.console.common.domain.PageResult;
+import com.alibaba.repeater.console.common.model.ModuleInfo;
 import com.alibaba.repeater.console.common.params.ModuleInfoParams;
-import com.alibaba.repeater.console.dal.dao.ModuleInfoDao;
-import com.alibaba.repeater.console.dal.model.ModuleInfo;
 import com.alibaba.repeater.console.service.ModuleInfoService;
 import com.alibaba.repeater.console.service.convert.ModuleInfoConverter;
 import com.alibaba.repeater.console.service.util.EsUtil;
@@ -52,8 +51,6 @@ public class ModuleInfoServiceImpl implements ModuleInfoService {
     @Value("${repeat.reload.url}")
     private String reloadURI;
     private static String installBash = "sh %s/sandbox/bin/sandbox.sh -p %s -P 8820";
-    @Resource
-    private ModuleInfoDao moduleInfoDao;
     @Resource
     private EsUtil esUtil;
     @Resource

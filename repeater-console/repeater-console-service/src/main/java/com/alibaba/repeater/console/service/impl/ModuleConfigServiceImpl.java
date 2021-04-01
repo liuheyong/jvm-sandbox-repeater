@@ -11,10 +11,9 @@ import com.alibaba.repeater.console.common.constant.Constant;
 import com.alibaba.repeater.console.common.domain.ModuleConfigBO;
 import com.alibaba.repeater.console.common.domain.ModuleInfoBO;
 import com.alibaba.repeater.console.common.domain.PageResult;
+import com.alibaba.repeater.console.common.model.ModuleConfig;
 import com.alibaba.repeater.console.common.params.ModuleConfigParams;
 import com.alibaba.repeater.console.common.params.ModuleInfoParams;
-import com.alibaba.repeater.console.dal.dao.ModuleConfigDao;
-import com.alibaba.repeater.console.dal.model.ModuleConfig;
 import com.alibaba.repeater.console.service.ModuleConfigService;
 import com.alibaba.repeater.console.service.ModuleInfoService;
 import com.alibaba.repeater.console.service.convert.ModuleConfigConverter;
@@ -54,8 +53,6 @@ public class ModuleConfigServiceImpl implements ModuleConfigService {
 
     @Resource
     private EsUtil esUtil;
-    @Resource
-    private ModuleConfigDao moduleConfigDao;
     @Resource
     private ModuleConfigConverter moduleConfigConverter;
     @Resource

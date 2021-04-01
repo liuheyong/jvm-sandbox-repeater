@@ -5,7 +5,7 @@ import com.alibaba.jvm.sandbox.repeater.plugin.domain.MockInvocation;
 import com.alibaba.repeater.console.common.domain.DifferenceBO;
 import com.alibaba.repeater.console.common.domain.ReplayBO;
 import com.alibaba.repeater.console.common.domain.ReplayStatus;
-import com.alibaba.repeater.console.dal.model.Replay;
+import com.alibaba.repeater.console.common.model.Replay;
 import com.alibaba.repeater.console.service.util.JacksonUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;

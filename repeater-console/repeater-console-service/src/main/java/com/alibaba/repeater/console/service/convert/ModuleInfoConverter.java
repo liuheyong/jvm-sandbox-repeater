@@ -2,7 +2,7 @@ package com.alibaba.repeater.console.service.convert;
 
 import com.alibaba.repeater.console.common.domain.ModuleInfoBO;
 import com.alibaba.repeater.console.common.domain.ModuleStatus;
-import com.alibaba.repeater.console.dal.model.ModuleInfo;
+import com.alibaba.repeater.console.common.model.ModuleInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 

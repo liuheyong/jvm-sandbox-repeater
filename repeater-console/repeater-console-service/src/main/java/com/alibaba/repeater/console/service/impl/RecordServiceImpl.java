@@ -9,9 +9,8 @@ import com.alibaba.repeater.console.common.constant.Constant;
 import com.alibaba.repeater.console.common.domain.PageResult;
 import com.alibaba.repeater.console.common.domain.RecordBO;
 import com.alibaba.repeater.console.common.domain.RecordDetailBO;
+import com.alibaba.repeater.console.common.model.Record;
 import com.alibaba.repeater.console.common.params.RecordParams;
-import com.alibaba.repeater.console.dal.dao.RecordDao;
-import com.alibaba.repeater.console.dal.model.Record;
 import com.alibaba.repeater.console.service.RecordService;
 import com.alibaba.repeater.console.service.convert.ModelConverter;
 import com.alibaba.repeater.console.service.util.ConvertUtil;
@@ -44,8 +43,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class RecordServiceImpl implements RecordService {
 
-    @Resource
-    private RecordDao recordDao;
     @Resource
     private ModelConverter<Record, RecordBO> recordConverter;
     @Resource
