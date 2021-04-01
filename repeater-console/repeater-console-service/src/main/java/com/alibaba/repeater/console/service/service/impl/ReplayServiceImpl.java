@@ -91,6 +91,7 @@ public class ReplayServiceImpl implements ReplayService {
         }
         final Record record = objectList.get(0);
         if (StringUtils.isEmpty(params.getRepeatId())) {
+            // TODO wenyixicodedog  repeatId
             params.setRepeatId(TraceGenerator.generate());
         }
         // save replay record
@@ -213,7 +214,6 @@ public class ReplayServiceImpl implements ReplayService {
         replay.setGmtCreate(new Date());
         replay.setGmtModified(new Date());
         replay.setStatus(ReplayStatus.PROCESSING.getStatus());
-        // 冗余了一个repeatID，实际可以直接使用replay#id
         esUtil.save(Constant.ES_INDEX, Constant.REPLAY_ES_TYPE, replay.getGmtModified(), replay);
         return replay;
     }
