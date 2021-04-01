@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration scan="true" scanPeriod="10000">
 
-    <appender name="REPEATER-FILE-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${user.home}/logs/sandbox/repeater/repeater.log</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${user.home}/logs/sandbox/repeater/repeater.log.%d{yyyy-MM-dd}</FileNamePattern>
-            <MaxHistory>30</MaxHistory>
+    <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${user.home}/logs/sandbox/repeater/repeater-info.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${user.home}/logs/sandbox/repeater/repeater-info.log.%d{yyyy-MM-dd}</FileNamePattern>
+            <maxFileSize>50MB</maxFileSize>  <!-- 日志文件过大会使的编辑器打开非常慢，因此设置日志最大50MB -->
+            <maxHistory>30</maxHistory>  <!-- 保存30天 -->
+            <totalSizeCap>20GB</totalSizeCap> <!-- 总日志大小 -->
         </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${user.home}/logs/sandbox/repeater/repeater-error.log</file> <!-- 日志名称 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${user.home}/logs/sandbox/repeater/repeater-error.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxFileSize>50MB</maxFileSize>  <!-- 日志文件过大会使的编辑器打开非常慢，因此设置日志最大50MB -->
+            <maxHistory>30</maxHistory>  <!-- 保存30天 -->
+            <totalSizeCap>20GB</totalSizeCap> <!-- 总日志大小 -->
+        </rollingPolicy>
+        <!-- encoder负责两件事，一是把日志信息转换成字节数组，二是把字节数组写入到输出流。 -->
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %msg%n</pattern>
             <charset>UTF-8</charset>
@@ -14,7 +30,8 @@
     </appender>
 
     <root level="info">
-        <appender-ref ref="REPEATER-FILE-APPENDER"/>
+        <appender-ref ref="INFO"/>
+        <appender-ref ref="ERROR"/>
     </root>
 
 </configuration>

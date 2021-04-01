@@ -2,8 +2,10 @@ package com.alibaba.repeater.console.start.controller.regress;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.util.ExecutorInner;
+import com.alibaba.jvm.sandbox.repeater.plugin.core.util.LogUtil;
 import com.alibaba.jvm.sandbox.repeater.plugin.domain.RepeaterResult;
 import com.alibaba.repeater.console.common.domain.Regress;
+import com.alibaba.repeater.console.common.exception.BizException;
 import com.alibaba.repeater.console.service.service.RegressService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,6 +50,8 @@ public class RegressController {
         if (partner.getData().equals(female) && male.equals(name)) {
             return "天哪!李雷和韩梅梅终于在一起了~";
         }
+        LogUtil.info(name + "成功匹配到小伙伴[" + partner.getData() + "]!");
+        LogUtil.error(name + "成功匹配到小伙伴[" + partner.getData() + "]!", new BizException("ex"));
         return name + "成功匹配到小伙伴[" + partner.getData() + "]!";
     }
 

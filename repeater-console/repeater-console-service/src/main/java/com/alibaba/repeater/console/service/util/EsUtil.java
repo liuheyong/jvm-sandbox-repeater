@@ -33,7 +33,7 @@ public class EsUtil {
     private RestHighLevelClient restHighLevelClient;
 
     /**
-     * 插入es数据
+     * 插入es数据【单个Object写入】
      *
      * @Author: liuheyong
      * @date: 2021/3/29
