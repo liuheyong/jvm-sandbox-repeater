@@ -7,7 +7,7 @@ import com.alibaba.jvm.sandbox.repeater.plugin.domain.RepeaterResult;
 import com.alibaba.repeater.console.common.domain.ModuleConfigBO;
 import com.alibaba.repeater.console.common.domain.PageResult;
 import com.alibaba.repeater.console.common.params.ModuleConfigParams;
-import com.alibaba.repeater.console.service.ModuleConfigService;
+import com.alibaba.repeater.console.service.service.ModuleConfigService;
 import com.alibaba.repeater.console.service.util.JacksonUtil;
 import com.alibaba.repeater.console.start.controller.vo.PagerAdapter;
 import com.google.common.collect.Lists;
@@ -101,10 +101,10 @@ public class ModuleConfigController {
         defaultConf.setRepeatIdentities(Lists.newArrayList("java", "http"));
         defaultConf.setUseTtl(true);
         defaultConf.setHttpEntrancePatterns(Lists.newArrayList("^/regress/.*$"));
-        behaviors.add(new Behavior("com.alibaba.repeater.console.service.impl.RegressServiceImpl", "getRegress"));
+        behaviors.add(new Behavior("com.alibaba.repeater.console.service.service.impl.RegressServiceImpl", "getRegress"));
         defaultConf.setJavaEntranceBehaviors(behaviors);
         List<Behavior> subBehaviors = Lists.newArrayList();
-        subBehaviors.add(new Behavior("com.alibaba.repeater.console.service.impl.RegressServiceImpl", "getRegressInner", "findPartner", "slogan"));
+        subBehaviors.add(new Behavior("com.alibaba.repeater.console.service.service.impl.RegressServiceImpl", "getRegressInner", "findPartner", "slogan"));
         defaultConf.setJavaSubInvokeBehaviors(subBehaviors);
         try {
             return RepeaterResult.builder().success(true).data(JacksonUtil.serialize(defaultConf)).build();

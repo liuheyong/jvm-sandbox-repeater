@@ -1,9 +1,9 @@
-package com.alibaba.repeater.console.service.impl;
+package com.alibaba.repeater.console.service.service.impl;
 
 import com.alibaba.jvm.sandbox.repeater.plugin.core.util.ExecutorInner;
 import com.alibaba.jvm.sandbox.repeater.plugin.domain.RepeaterResult;
 import com.alibaba.repeater.console.common.domain.Regress;
-import com.alibaba.repeater.console.service.RegressService;
+import com.alibaba.repeater.console.service.service.RegressService;
 import com.google.common.collect.Lists;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;

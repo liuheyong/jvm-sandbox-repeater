@@ -1,4 +1,4 @@
-package com.alibaba.repeater.console.service.impl;
+package com.alibaba.repeater.console.service.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.util.HttpUtil;
@@ -9,7 +9,7 @@ import com.alibaba.repeater.console.common.domain.ModuleStatus;
 import com.alibaba.repeater.console.common.domain.PageResult;
 import com.alibaba.repeater.console.common.model.ModuleInfo;
 import com.alibaba.repeater.console.common.params.ModuleInfoParams;
-import com.alibaba.repeater.console.service.ModuleInfoService;
+import com.alibaba.repeater.console.service.service.ModuleInfoService;
 import com.alibaba.repeater.console.service.convert.ModuleInfoConverter;
 import com.alibaba.repeater.console.service.util.EsUtil;
 import com.alibaba.repeater.console.service.util.ResultHelper;

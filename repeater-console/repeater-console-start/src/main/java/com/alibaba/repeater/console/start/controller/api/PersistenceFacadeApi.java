@@ -3,8 +3,8 @@ package com.alibaba.repeater.console.start.controller.api;
 import com.alibaba.jvm.sandbox.repeater.plugin.domain.RepeatModel;
 import com.alibaba.jvm.sandbox.repeater.plugin.domain.RepeaterResult;
 import com.alibaba.repeater.console.common.params.ReplayParams;
-import com.alibaba.repeater.console.service.RecordService;
-import com.alibaba.repeater.console.service.ReplayService;
+import com.alibaba.repeater.console.service.service.RecordService;
+import com.alibaba.repeater.console.service.service.ReplayService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 

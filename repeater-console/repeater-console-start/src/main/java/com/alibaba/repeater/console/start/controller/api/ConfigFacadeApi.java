@@ -4,7 +4,7 @@ import com.alibaba.jvm.sandbox.repeater.plugin.domain.RepeaterConfig;
 import com.alibaba.jvm.sandbox.repeater.plugin.domain.RepeaterResult;
 import com.alibaba.repeater.console.common.domain.ModuleConfigBO;
 import com.alibaba.repeater.console.common.params.ModuleConfigParams;
-import com.alibaba.repeater.console.service.ModuleConfigService;
+import com.alibaba.repeater.console.service.service.ModuleConfigService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -4,7 +4,7 @@ import com.alibaba.jvm.sandbox.repeater.plugin.domain.RepeaterResult;
 import com.alibaba.repeater.console.common.domain.ModuleInfoBO;
 import com.alibaba.repeater.console.common.domain.PageResult;
 import com.alibaba.repeater.console.common.params.ModuleInfoParams;
-import com.alibaba.repeater.console.service.ModuleInfoService;
+import com.alibaba.repeater.console.service.service.ModuleInfoService;
 import com.alibaba.repeater.console.start.controller.vo.PagerAdapter;
 import com.alibaba.repeater.console.start.util.IpUtil;
 import org.apache.commons.collections4.CollectionUtils;

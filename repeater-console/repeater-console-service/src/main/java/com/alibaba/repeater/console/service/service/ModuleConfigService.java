@@ -1,4 +1,4 @@
-package com.alibaba.repeater.console.service;
+package com.alibaba.repeater.console.service.service;
 
 import com.alibaba.jvm.sandbox.repeater.plugin.domain.RepeaterResult;
 import com.alibaba.repeater.console.common.domain.ModuleConfigBO;

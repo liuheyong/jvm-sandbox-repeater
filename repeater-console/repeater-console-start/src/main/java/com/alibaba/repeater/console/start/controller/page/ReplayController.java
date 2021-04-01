@@ -3,7 +3,7 @@ package com.alibaba.repeater.console.start.controller.page;
 import com.alibaba.jvm.sandbox.repeater.plugin.domain.RepeaterResult;
 import com.alibaba.repeater.console.common.domain.ReplayBO;
 import com.alibaba.repeater.console.common.params.ReplayParams;
-import com.alibaba.repeater.console.service.ReplayService;
+import com.alibaba.repeater.console.service.service.ReplayService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

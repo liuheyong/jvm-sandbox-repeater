@@ -1,10 +1,10 @@
-package com.alibaba.repeater.console.start.controller.test;
+package com.alibaba.repeater.console.start.controller.regress;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.util.ExecutorInner;
 import com.alibaba.jvm.sandbox.repeater.plugin.domain.RepeaterResult;
 import com.alibaba.repeater.console.common.domain.Regress;
-import com.alibaba.repeater.console.service.RegressService;
+import com.alibaba.repeater.console.service.service.RegressService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

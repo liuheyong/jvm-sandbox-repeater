@@ -5,7 +5,7 @@ import com.alibaba.repeater.console.common.domain.PageResult;
 import com.alibaba.repeater.console.common.domain.RecordBO;
 import com.alibaba.repeater.console.common.domain.RecordDetailBO;
 import com.alibaba.repeater.console.common.params.RecordParams;
-import com.alibaba.repeater.console.service.RecordService;
+import com.alibaba.repeater.console.service.service.RecordService;
 import com.alibaba.repeater.console.start.controller.vo.PagerAdapter;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.web.bind.annotation.PostMapping;
