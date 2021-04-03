@@ -60,6 +60,7 @@ public class EsUtil {
      */
     public Boolean indexExists(String indexName) {
         try {
+            log.info("判断是否存在索引:{}", indexName);
             GetIndexRequest getIndexRequest = new GetIndexRequest();
             getIndexRequest.indices(indexName);
             return restHighLevelClient.indices().exists(getIndexRequest, RequestOptions.DEFAULT);
@@ -91,7 +92,7 @@ public class EsUtil {
         } catch (IOException e) {
             log.error("查询失败", e);
         }
-        log.info("查询数据成功");
+        log.info("查询数据成功,List<Map<String, Object>> result: {}", JSON.toJSONString(result));
         return result;
     }
 

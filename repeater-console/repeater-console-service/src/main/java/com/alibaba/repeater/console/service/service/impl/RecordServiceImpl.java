@@ -58,7 +58,8 @@ public class RecordServiceImpl implements RecordService {
                 return RepeaterResult.builder().success(false).message("invalid request").build();
             }
             Record record = ConvertUtil.convertWrapper(wrapper, body);
-            esUtil.save(Constant.RECORD_ES_INDEX, Constant.RECORD_ES_TYPE, record.getGmtCreate(), record);
+            record.setId(record.getGmtRecord().getTime());
+            esUtil.save(Constant.RECORD_ES_INDEX, Constant.RECORD_ES_TYPE, record.getId(), record);
             return RepeaterResult.builder().success(true).message("operate success").data("-/-").build();
         } catch (Throwable throwable) {
             return RepeaterResult.builder().success(false).message(throwable.getMessage()).build();

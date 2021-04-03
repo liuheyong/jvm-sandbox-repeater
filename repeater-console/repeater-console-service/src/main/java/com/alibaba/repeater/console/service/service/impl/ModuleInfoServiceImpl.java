@@ -142,6 +142,7 @@ public class ModuleInfoServiceImpl implements ModuleInfoService {
         ModuleInfo moduleInfo = moduleInfoConverter.reconvert(params);
         moduleInfo.setGmtModified(new Date());
         moduleInfo.setGmtCreate(new Date());
+        moduleInfo.setId(moduleInfo.getGmtCreate().getTime());
         if (esUtil.indexExists(Constant.MODULE_INFO_ES_INDEX)) {
             SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
                     .timeout(new TimeValue(5, TimeUnit.SECONDS))
@@ -155,9 +156,9 @@ public class ModuleInfoServiceImpl implements ModuleInfoService {
             if (CollectionUtils.isEmpty(objectList)) {
                 return ResultHelper.fail("data not exist");
             }
-            moduleInfo.setGmtCreate(objectList.get(0).getGmtCreate());
+            moduleInfo.setId(objectList.get(0).getId());
         }
-        esUtil.save(Constant.MODULE_INFO_ES_INDEX, Constant.MODULE_INFO_ES_TYPE, moduleInfo.getGmtCreate(), moduleInfo);
+        esUtil.save(Constant.MODULE_INFO_ES_INDEX, Constant.MODULE_INFO_ES_TYPE, moduleInfo.getId(), moduleInfo);
         return ResultHelper.success(moduleInfoConverter.convert(moduleInfo));
     }
 
@@ -259,7 +260,7 @@ public class ModuleInfoServiceImpl implements ModuleInfoService {
         }
         moduleInfo.setStatus(finishStatus.name());
         moduleInfo.setGmtModified(new Date());
-        esUtil.save(Constant.MODULE_INFO_ES_INDEX, Constant.MODULE_INFO_ES_TYPE, moduleInfo.getGmtCreate(), moduleInfo);
+        esUtil.save(Constant.MODULE_INFO_ES_INDEX, Constant.MODULE_INFO_ES_TYPE, moduleInfo.getId(), moduleInfo);
         return ResultHelper.success(moduleInfoConverter.convert(moduleInfo));
     }
 }

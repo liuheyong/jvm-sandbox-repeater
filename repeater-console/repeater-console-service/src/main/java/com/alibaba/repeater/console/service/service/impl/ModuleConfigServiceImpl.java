@@ -141,9 +141,10 @@ public class ModuleConfigServiceImpl implements ModuleConfigService {
             moduleConfig.setEnvironment(params.getEnvironment());
             moduleConfig.setConfig(params.getConfig());
             moduleConfig.setGmtCreate(new Date());
+            moduleConfig.setId(moduleConfig.getGmtCreate().getTime());
         }
         moduleConfig.setGmtModified(new Date());
-        esUtil.save(Constant.MODULE_CONFIG_ES_INDEX, Constant.MODULE_CONFIG_ES_TYPE, moduleConfig.getGmtCreate(), moduleConfig);
+        esUtil.save(Constant.MODULE_CONFIG_ES_INDEX, Constant.MODULE_CONFIG_ES_TYPE, moduleConfig.getId(), moduleConfig);
         return ResultHelper.success(moduleConfigConverter.convert(moduleConfig));
     }
 

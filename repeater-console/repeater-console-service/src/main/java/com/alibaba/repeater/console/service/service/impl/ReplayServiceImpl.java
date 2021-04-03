@@ -164,7 +164,7 @@ public class ReplayServiceImpl implements ReplayService {
             log.error("error occurred serialize diff result", e);
             return RepeaterResult.builder().message("operate failed").build();
         }
-        esUtil.save(Constant.REPLAY_ES_INDEX, Constant.REPLAY_ES_TYPE, replay.getGmtCreate(), replay);
+        esUtil.save(Constant.REPLAY_ES_INDEX, Constant.REPLAY_ES_TYPE, replay.getId(), replay);
         return RepeaterResult.builder().success(true).message("operate success").data("-/-").build();
     }
 
@@ -214,7 +214,8 @@ public class ReplayServiceImpl implements ReplayService {
         replay.setGmtCreate(new Date());
         replay.setGmtModified(new Date());
         replay.setStatus(ReplayStatus.PROCESSING.getStatus());
-        esUtil.save(Constant.REPLAY_ES_INDEX, Constant.REPLAY_ES_TYPE, replay.getGmtCreate(), replay);
+        replay.setId(replay.getGmtCreate().getTime());
+        esUtil.save(Constant.REPLAY_ES_INDEX, Constant.REPLAY_ES_TYPE, replay.getId(), replay);
         return replay;
     }
 }
