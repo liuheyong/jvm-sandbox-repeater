@@ -72,6 +72,9 @@ public class ModuleInfoServiceImpl implements ModuleInfoService {
         if (StringUtils.isNotBlank(params.getAppName())) {
             sourceBuilder.query(QueryBuilders.termsQuery("appName", params.getAppName()));
         }
+        if (StringUtils.isNotBlank(params.getAppName())) {
+            sourceBuilder.query(QueryBuilders.termsQuery("environment", params.getEnvironment()));
+        }
         if (StringUtils.isNotBlank(params.getIp())) {
             sourceBuilder.query(QueryBuilders.termsQuery("ip", params.getIp()));
         }
