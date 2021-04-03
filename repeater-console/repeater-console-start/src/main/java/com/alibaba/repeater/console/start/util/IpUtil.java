@@ -1,5 +1,6 @@
 package com.alibaba.repeater.console.start.util;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.util.LogUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -70,6 +71,7 @@ public class IpUtil {
         } catch (SocketException e) {
             LogUtil.error(e.getMessage(), e);
         }
+        LogUtil.info("ip set: {}", JSON.toJSONString(ipSet));
         return ip;
     }
 }
