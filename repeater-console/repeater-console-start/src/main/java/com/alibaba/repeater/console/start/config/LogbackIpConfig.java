@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import static com.alibaba.repeater.console.start.util.IpUtil.getRealIp;
+
 /**
  * @description: logback日志添加ip信息
  */
@@ -18,7 +20,11 @@ public class LogbackIpConfig extends ClassicConverter {
     @Override
     public String convert(ILoggingEvent event) {
         try {
-            return InetAddress.getLocalHost().getHostAddress();
+            String ip = InetAddress.getLocalHost().getHostAddress();
+            if ("127.0.0.1".equals(ip)) {
+                return getRealIp();
+            }
+            return ip;
         } catch (UnknownHostException e) {
             logger.error("获取日志Ip异常", e);
         }
