@@ -14,9 +14,9 @@ import com.alibaba.repeater.console.common.domain.PageResult;
 import com.alibaba.repeater.console.common.model.ModuleConfig;
 import com.alibaba.repeater.console.common.params.ModuleConfigParams;
 import com.alibaba.repeater.console.common.params.ModuleInfoParams;
+import com.alibaba.repeater.console.service.convert.ModuleConfigConverter;
 import com.alibaba.repeater.console.service.service.ModuleConfigService;
 import com.alibaba.repeater.console.service.service.ModuleInfoService;
-import com.alibaba.repeater.console.service.convert.ModuleConfigConverter;
 import com.alibaba.repeater.console.service.util.EsUtil;
 import com.alibaba.repeater.console.service.util.JacksonUtil;
 import com.alibaba.repeater.console.service.util.ResultHelper;
@@ -62,10 +62,10 @@ public class ModuleConfigServiceImpl implements ModuleConfigService {
 
     @Override
     public PageResult<ModuleConfigBO> list(ModuleConfigParams params) {
-        if (!esUtil.indexExists(Constant.ES_INDEX)) {
+        if (!esUtil.indexExists(Constant.MODULE_CONFIG_ES_INDEX)) {
             PageResult<ModuleConfigBO> pageResult = new PageResult<>();
             pageResult.setSuccess(false);
-            pageResult.setMessage("no such data: " + Constant.ES_INDEX);
+            pageResult.setMessage("no data");
             return pageResult;
         }
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
@@ -79,7 +79,7 @@ public class ModuleConfigServiceImpl implements ModuleConfigService {
         if (StringUtils.isNotBlank(params.getEnvironment())) {
             sourceBuilder.query(QueryBuilders.termsQuery("environment", params.getEnvironment()));
         }
-        List<Map<String, Object>> search = esUtil.search(Constant.ES_INDEX, Constant.MODULE_CONFIG_ES_TYPE, sourceBuilder);
+        List<Map<String, Object>> search = esUtil.search(Constant.MODULE_CONFIG_ES_INDEX, Constant.MODULE_CONFIG_ES_TYPE, sourceBuilder);
         List<ModuleConfig> objectList = search.stream()
                 .map(o -> BeanUtil.mapToBean(o, ModuleConfig.class, true))
                 .collect(Collectors.toList());
@@ -87,7 +87,7 @@ public class ModuleConfigServiceImpl implements ModuleConfigService {
         SearchSourceBuilder sourceBuilder2 = new SearchSourceBuilder()
                 .timeout(new TimeValue(5, TimeUnit.SECONDS))
                 .sort(new ScoreSortBuilder().order(SortOrder.DESC));
-        List<Map<String, Object>> search2 = esUtil.search(Constant.ES_INDEX, Constant.MODULE_CONFIG_ES_TYPE, sourceBuilder2);
+        List<Map<String, Object>> search2 = esUtil.search(Constant.MODULE_CONFIG_ES_INDEX, Constant.MODULE_CONFIG_ES_TYPE, sourceBuilder2);
 
         PageResult<ModuleConfigBO> result = new PageResult<>();
         if (CollectionUtils.isNotEmpty(objectList)) {
@@ -107,15 +107,15 @@ public class ModuleConfigServiceImpl implements ModuleConfigService {
 
     @Override
     public RepeaterResult<ModuleConfigBO> query(ModuleConfigParams params) {
-        if (!esUtil.indexExists(Constant.ES_INDEX)) {
-            return ResultHelper.fail("no such data: " + Constant.ES_INDEX);
+        if (!esUtil.indexExists(Constant.MODULE_CONFIG_ES_INDEX)) {
+            return ResultHelper.fail("no data");
         }
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
                 .timeout(new TimeValue(5, TimeUnit.SECONDS))
                 .query(QueryBuilders.termsQuery("appName", params.getAppName()))
                 .query(QueryBuilders.termsQuery("environment", params.getEnvironment()))
                 .sort(new ScoreSortBuilder().order(SortOrder.DESC));
-        List<Map<String, Object>> search = esUtil.search(Constant.ES_INDEX, Constant.MODULE_CONFIG_ES_TYPE, sourceBuilder);
+        List<Map<String, Object>> search = esUtil.search(Constant.MODULE_CONFIG_ES_INDEX, Constant.MODULE_CONFIG_ES_TYPE, sourceBuilder);
         List<ModuleConfig> objectList = search.stream()
                 .map(o -> BeanUtil.mapToBean(o, ModuleConfig.class, true))
                 .collect(Collectors.toList());
@@ -143,7 +143,7 @@ public class ModuleConfigServiceImpl implements ModuleConfigService {
             moduleConfig.setGmtCreate(new Date());
         }
         moduleConfig.setGmtModified(new Date());
-        esUtil.save(Constant.ES_INDEX, Constant.MODULE_CONFIG_ES_TYPE, moduleConfig.getGmtModified(), moduleConfig);
+        esUtil.save(Constant.MODULE_CONFIG_ES_INDEX, Constant.MODULE_CONFIG_ES_TYPE, moduleConfig.getGmtCreate(), moduleConfig);
         return ResultHelper.success(moduleConfigConverter.convert(moduleConfig));
     }
 

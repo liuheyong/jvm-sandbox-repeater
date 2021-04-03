@@ -11,8 +11,8 @@ import com.alibaba.repeater.console.common.domain.RecordBO;
 import com.alibaba.repeater.console.common.domain.RecordDetailBO;
 import com.alibaba.repeater.console.common.model.Record;
 import com.alibaba.repeater.console.common.params.RecordParams;
-import com.alibaba.repeater.console.service.service.RecordService;
 import com.alibaba.repeater.console.service.convert.ModelConverter;
+import com.alibaba.repeater.console.service.service.RecordService;
 import com.alibaba.repeater.console.service.util.ConvertUtil;
 import com.alibaba.repeater.console.service.util.EsUtil;
 import com.alibaba.repeater.console.service.util.ResultHelper;
@@ -58,7 +58,7 @@ public class RecordServiceImpl implements RecordService {
                 return RepeaterResult.builder().success(false).message("invalid request").build();
             }
             Record record = ConvertUtil.convertWrapper(wrapper, body);
-            esUtil.save(Constant.ES_INDEX, Constant.RECORD_ES_TYPE, record.getGmtRecord(), record);
+            esUtil.save(Constant.RECORD_ES_INDEX, Constant.RECORD_ES_TYPE, record.getGmtCreate(), record);
             return RepeaterResult.builder().success(true).message("operate success").data("-/-").build();
         } catch (Throwable throwable) {
             return RepeaterResult.builder().success(false).message(throwable.getMessage()).build();
@@ -72,7 +72,7 @@ public class RecordServiceImpl implements RecordService {
                 .query(QueryBuilders.termsQuery("appName", appName))
                 .query(QueryBuilders.termsQuery("traceId", traceId))
                 .sort(new ScoreSortBuilder().order(SortOrder.DESC));
-        List<Map<String, Object>> search = esUtil.search(Constant.ES_INDEX, Constant.MODULE_INFO_ES_TYPE, sourceBuilder);
+        List<Map<String, Object>> search = esUtil.search(Constant.RECORD_ES_INDEX, Constant.MODULE_INFO_ES_TYPE, sourceBuilder);
         List<Record> objectList = search.stream()
                 .map(o -> BeanUtil.mapToBean(o, Record.class, true))
                 .collect(Collectors.toList());
@@ -84,10 +84,10 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public PageResult<RecordBO> query(RecordParams params) {
-        if (!esUtil.indexExists(Constant.ES_INDEX)) {
+        if (!esUtil.indexExists(Constant.RECORD_ES_INDEX)) {
             PageResult<RecordBO> pageResult = new PageResult<>();
             pageResult.setSuccess(false);
-            pageResult.setMessage("no such data: " + Constant.ES_INDEX);
+            pageResult.setMessage("no data");
             return pageResult;
         }
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
@@ -101,7 +101,7 @@ public class RecordServiceImpl implements RecordService {
         if (StringUtils.isNotBlank(params.getTraceId())) {
             sourceBuilder.query(QueryBuilders.termsQuery("traceId", params.getTraceId()));
         }
-        List<Map<String, Object>> search = esUtil.search(Constant.ES_INDEX, Constant.RECORD_ES_TYPE, sourceBuilder);
+        List<Map<String, Object>> search = esUtil.search(Constant.RECORD_ES_INDEX, Constant.RECORD_ES_TYPE, sourceBuilder);
         List<Record> objectList = search.stream()
                 .map(o -> BeanUtil.mapToBean(o, Record.class, true))
                 .collect(Collectors.toList());
@@ -109,11 +109,11 @@ public class RecordServiceImpl implements RecordService {
         SearchSourceBuilder sourceBuilder2 = new SearchSourceBuilder()
                 .timeout(new TimeValue(5, TimeUnit.SECONDS))
                 .sort(new ScoreSortBuilder().order(SortOrder.DESC));
-        List<Map<String, Object>> search2 = esUtil.search(Constant.ES_INDEX, Constant.RECORD_ES_TYPE, sourceBuilder2);
+        List<Map<String, Object>> search2 = esUtil.search(Constant.RECORD_ES_INDEX, Constant.RECORD_ES_TYPE, sourceBuilder2);
 
         PageResult<RecordBO> result = new PageResult<>();
         if (CollectionUtils.isNotEmpty(objectList)) {
-            result.setCount(Long.valueOf(search2.size()));
+            result.setCount((long) search2.size());
             result.setTotalPage((search2.size() - 1) / params.getSize() + 1);
             result.setData(objectList.stream().map(recordConverter::convert).collect(Collectors.toList()));
         } else {
@@ -141,7 +141,7 @@ public class RecordServiceImpl implements RecordService {
         if (StringUtils.isNotBlank(params.getEnvironment())) {
             sourceBuilder.query(QueryBuilders.termsQuery("environment", params.getEnvironment()));
         }
-        List<Map<String, Object>> search = esUtil.search(Constant.ES_INDEX, Constant.MODULE_INFO_ES_TYPE, sourceBuilder);
+        List<Map<String, Object>> search = esUtil.search(Constant.RECORD_ES_INDEX, Constant.MODULE_INFO_ES_TYPE, sourceBuilder);
         List<Record> objectList = search.stream()
                 .map(o -> BeanUtil.mapToBean(o, Record.class, true))
                 .collect(Collectors.toList());

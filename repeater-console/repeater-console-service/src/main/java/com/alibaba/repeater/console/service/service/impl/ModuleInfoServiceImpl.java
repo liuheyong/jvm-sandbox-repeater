@@ -9,8 +9,8 @@ import com.alibaba.repeater.console.common.domain.ModuleStatus;
 import com.alibaba.repeater.console.common.domain.PageResult;
 import com.alibaba.repeater.console.common.model.ModuleInfo;
 import com.alibaba.repeater.console.common.params.ModuleInfoParams;
-import com.alibaba.repeater.console.service.service.ModuleInfoService;
 import com.alibaba.repeater.console.service.convert.ModuleInfoConverter;
+import com.alibaba.repeater.console.service.service.ModuleInfoService;
 import com.alibaba.repeater.console.service.util.EsUtil;
 import com.alibaba.repeater.console.service.util.ResultHelper;
 import com.google.common.collect.Lists;
@@ -58,10 +58,10 @@ public class ModuleInfoServiceImpl implements ModuleInfoService {
 
     @Override
     public PageResult<ModuleInfoBO> query(ModuleInfoParams params) {
-        if (!esUtil.indexExists(Constant.ES_INDEX)) {
+        if (!esUtil.indexExists(Constant.MODULE_INFO_ES_INDEX)) {
             PageResult<ModuleInfoBO> pageResult = new PageResult<>();
             pageResult.setSuccess(false);
-            pageResult.setMessage("no such data: " + Constant.ES_INDEX);
+            pageResult.setMessage("no data");
             return pageResult;
         }
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
@@ -75,7 +75,7 @@ public class ModuleInfoServiceImpl implements ModuleInfoService {
         if (StringUtils.isNotBlank(params.getIp())) {
             sourceBuilder.query(QueryBuilders.termsQuery("ip", params.getIp()));
         }
-        List<Map<String, Object>> search = esUtil.search(Constant.ES_INDEX, Constant.MODULE_INFO_ES_TYPE, sourceBuilder);
+        List<Map<String, Object>> search = esUtil.search(Constant.MODULE_INFO_ES_INDEX, Constant.MODULE_INFO_ES_TYPE, sourceBuilder);
         List<ModuleInfo> objectList = search.stream()
                 .map(o -> BeanUtil.mapToBean(o, ModuleInfo.class, true))
                 .collect(Collectors.toList());
@@ -83,11 +83,11 @@ public class ModuleInfoServiceImpl implements ModuleInfoService {
         SearchSourceBuilder sourceBuilder2 = new SearchSourceBuilder()
                 .timeout(new TimeValue(5, TimeUnit.SECONDS))
                 .sort(new ScoreSortBuilder().order(SortOrder.DESC));
-        List<Map<String, Object>> search2 = esUtil.search(Constant.ES_INDEX, Constant.MODULE_INFO_ES_TYPE, sourceBuilder2);
+        List<Map<String, Object>> search2 = esUtil.search(Constant.MODULE_INFO_ES_INDEX, Constant.MODULE_INFO_ES_TYPE, sourceBuilder2);
 
         PageResult<ModuleInfoBO> result = new PageResult<>();
         if (CollectionUtils.isNotEmpty(objectList)) {
-            result.setCount(Long.valueOf(search2.size()));
+            result.setCount((long) search2.size());
             result.setTotalPage((search2.size() - 1) / params.getSize() + 1);
             result.setData(objectList.stream().map(moduleInfoConverter::convert).collect(Collectors.toList()));
         } else {
@@ -103,14 +103,14 @@ public class ModuleInfoServiceImpl implements ModuleInfoService {
 
     @Override
     public RepeaterResult<List<ModuleInfoBO>> query(String appName) {
-        if (!esUtil.indexExists(Constant.ES_INDEX)) {
-            return ResultHelper.fail("no such data: " + Constant.ES_INDEX);
+        if (!esUtil.indexExists(Constant.MODULE_INFO_ES_INDEX)) {
+            return ResultHelper.fail("no data");
         }
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
                 .timeout(new TimeValue(5, TimeUnit.SECONDS))
                 .query(QueryBuilders.termsQuery("appName", appName))
                 .sort(new ScoreSortBuilder().order(SortOrder.DESC));
-        List<Map<String, Object>> search = esUtil.search(Constant.ES_INDEX, Constant.MODULE_INFO_ES_TYPE, sourceBuilder);
+        List<Map<String, Object>> search = esUtil.search(Constant.MODULE_INFO_ES_INDEX, Constant.MODULE_INFO_ES_TYPE, sourceBuilder);
         List<ModuleInfo> objectList = search.stream()
                 .map(o -> BeanUtil.mapToBean(o, ModuleInfo.class, true))
                 .collect(Collectors.toList());
@@ -127,7 +127,7 @@ public class ModuleInfoServiceImpl implements ModuleInfoService {
                 .query(QueryBuilders.termsQuery("appName", appName))
                 .query(QueryBuilders.termsQuery("ip", ip))
                 .sort(new ScoreSortBuilder().order(SortOrder.DESC));
-        List<Map<String, Object>> search = esUtil.search(Constant.ES_INDEX, Constant.MODULE_INFO_ES_TYPE, sourceBuilder);
+        List<Map<String, Object>> search = esUtil.search(Constant.MODULE_INFO_ES_INDEX, Constant.MODULE_INFO_ES_TYPE, sourceBuilder);
         List<ModuleInfo> objectList = search.stream()
                 .map(o -> BeanUtil.mapToBean(o, ModuleInfo.class, true))
                 .collect(Collectors.toList());
@@ -142,9 +142,22 @@ public class ModuleInfoServiceImpl implements ModuleInfoService {
         ModuleInfo moduleInfo = moduleInfoConverter.reconvert(params);
         moduleInfo.setGmtModified(new Date());
         moduleInfo.setGmtCreate(new Date());
-        if (!esUtil.indexExists(Constant.ES_INDEX)) {
-            esUtil.save(Constant.ES_INDEX, Constant.MODULE_INFO_ES_TYPE, moduleInfo.getGmtModified(), moduleInfo);
+        if (esUtil.indexExists(Constant.MODULE_INFO_ES_INDEX)) {
+            SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
+                    .timeout(new TimeValue(5, TimeUnit.SECONDS))
+                    .query(QueryBuilders.termsQuery("appName", moduleInfo.getAppName()))
+                    .query(QueryBuilders.termsQuery("environment", moduleInfo.getEnvironment()))
+                    .sort(new ScoreSortBuilder().order(SortOrder.DESC));
+            List<Map<String, Object>> search = esUtil.search(Constant.MODULE_INFO_ES_INDEX, Constant.MODULE_INFO_ES_TYPE, sourceBuilder);
+            List<ModuleInfo> objectList = search.stream()
+                    .map(o -> BeanUtil.mapToBean(o, ModuleInfo.class, true))
+                    .collect(Collectors.toList());
+            if (CollectionUtils.isEmpty(objectList)) {
+                return ResultHelper.fail("data not exist");
+            }
+            moduleInfo.setGmtCreate(objectList.get(0).getGmtCreate());
         }
+        esUtil.save(Constant.MODULE_INFO_ES_INDEX, Constant.MODULE_INFO_ES_TYPE, moduleInfo.getGmtCreate(), moduleInfo);
         return ResultHelper.success(moduleInfoConverter.convert(moduleInfo));
     }
 
@@ -214,7 +227,7 @@ public class ModuleInfoServiceImpl implements ModuleInfoService {
                 .query(QueryBuilders.termsQuery("appName", params.getAppName()))
                 .query(QueryBuilders.termsQuery("ip", params.getIp()))
                 .sort(new ScoreSortBuilder().order(SortOrder.DESC));
-        List<Map<String, Object>> search = esUtil.search(Constant.ES_INDEX, Constant.MODULE_INFO_ES_TYPE, sourceBuilder);
+        List<Map<String, Object>> search = esUtil.search(Constant.MODULE_INFO_ES_INDEX, Constant.MODULE_INFO_ES_TYPE, sourceBuilder);
         List<ModuleInfo> objectList = search.stream()
                 .map(o -> BeanUtil.mapToBean(o, ModuleInfo.class, true))
                 .collect(Collectors.toList());
@@ -232,7 +245,7 @@ public class ModuleInfoServiceImpl implements ModuleInfoService {
                 .query(QueryBuilders.termsQuery("appName", params.getAppName()))
                 .query(QueryBuilders.termsQuery("ip", params.getIp()))
                 .sort(new ScoreSortBuilder().order(SortOrder.DESC));
-        List<Map<String, Object>> search = esUtil.search(Constant.ES_INDEX, Constant.MODULE_INFO_ES_TYPE, sourceBuilder);
+        List<Map<String, Object>> search = esUtil.search(Constant.MODULE_INFO_ES_INDEX, Constant.MODULE_INFO_ES_TYPE, sourceBuilder);
         List<ModuleInfo> objectList = search.stream()
                 .map(o -> BeanUtil.mapToBean(o, ModuleInfo.class, true))
                 .collect(Collectors.toList());
@@ -246,7 +259,7 @@ public class ModuleInfoServiceImpl implements ModuleInfoService {
         }
         moduleInfo.setStatus(finishStatus.name());
         moduleInfo.setGmtModified(new Date());
-        esUtil.save(Constant.ES_INDEX, Constant.MODULE_INFO_ES_TYPE, moduleInfo.getGmtModified(), moduleInfo);
+        esUtil.save(Constant.MODULE_INFO_ES_INDEX, Constant.MODULE_INFO_ES_TYPE, moduleInfo.getGmtCreate(), moduleInfo);
         return ResultHelper.success(moduleInfoConverter.convert(moduleInfo));
     }
 }
