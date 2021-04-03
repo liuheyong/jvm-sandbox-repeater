@@ -71,7 +71,7 @@ public class IpUtil {
         } catch (SocketException e) {
             LogUtil.error(e.getMessage(), e);
         }
-        LogUtil.info("ip set: {}", JSON.toJSONString(ipSet));
+        LogUtil.info("重新获取ip set集合: {}", JSON.toJSONString(ipSet));
         return ip;
     }
 }
