@@ -5,7 +5,6 @@ import com.alibaba.jvm.sandbox.repeater.plugin.core.util.ExecutorInner;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.util.LogUtil;
 import com.alibaba.jvm.sandbox.repeater.plugin.domain.RepeaterResult;
 import com.alibaba.repeater.console.common.domain.Regress;
-import com.alibaba.repeater.console.common.exception.BizException;
 import com.alibaba.repeater.console.service.service.RegressService;
 import com.alibaba.repeater.console.start.util.IpUtil;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,14 +20,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.Enumeration;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * {@link RegressController} 持续回归demo服务
@@ -51,8 +44,8 @@ public class RegressController {
      * @return
      */
     @RequestMapping(value = "/partner/{name}", method = RequestMethod.GET)
-    public String partner(@PathVariable("name") String name) throws UnknownHostException {
-        LogUtil.info("本机ip:{}", InetAddress.getLocalHost().getHostAddress());
+    public String partner(@PathVariable("name") String name, HttpServletRequest request) throws UnknownHostException {
+        LogUtil.info("ip:{}", IpUtil.getIp(request));
         String male = "李雷";
         String female = "韩梅梅";
         RepeaterResult<String> partner = regressService.findPartner(name);
@@ -60,7 +53,6 @@ public class RegressController {
             return "天哪!李雷和韩梅梅终于在一起了~";
         }
         LogUtil.info(name + "成功匹配到小伙伴[" + partner.getData() + "]!");
-        //LogUtil.error(name + "成功匹配到小伙伴[" + partner.getData() + "]!", new BizException("ex"));
         return name + "成功匹配到小伙伴[" + partner.getData() + "]!";
     }
 
