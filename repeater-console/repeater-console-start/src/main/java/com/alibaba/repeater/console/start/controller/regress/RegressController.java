@@ -51,7 +51,7 @@ public class RegressController {
             return "天哪!李雷和韩梅梅终于在一起了~";
         }
         LogUtil.info(name + "成功匹配到小伙伴[" + partner.getData() + "]!");
-        LogUtil.error(name + "成功匹配到小伙伴[" + partner.getData() + "]!", new BizException("ex"));
+        //LogUtil.error(name + "成功匹配到小伙伴[" + partner.getData() + "]!", new BizException("ex"));
         return name + "成功匹配到小伙伴[" + partner.getData() + "]!";
     }
 

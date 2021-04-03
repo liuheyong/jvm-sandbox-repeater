@@ -1,5 +1,6 @@
 package com.alibaba.repeater.console.start.controller.page;
 
+import com.alibaba.jvm.sandbox.repeater.plugin.core.util.LogUtil;
 import com.alibaba.jvm.sandbox.repeater.plugin.domain.RepeaterResult;
 import com.alibaba.repeater.console.common.domain.ModuleInfoBO;
 import com.alibaba.repeater.console.common.domain.PageResult;
@@ -107,6 +108,7 @@ public class ModuleInfoController {
     @RequestMapping("/report.json")
     public RepeaterResult<ModuleInfoBO> list(@ModelAttribute("requestParams") ModuleInfoBO params, HttpServletRequest request) {
         params.setIp(IpUtil.getIp(request));
+        LogUtil.info("心跳接受参数:{}", params);
         return moduleInfoService.report(params);
     }
 
