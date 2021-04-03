@@ -22,8 +22,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * {@link RegressController} 持续回归demo服务
@@ -58,7 +63,6 @@ public class RegressController {
         //LogUtil.error(name + "成功匹配到小伙伴[" + partner.getData() + "]!", new BizException("ex"));
         return name + "成功匹配到小伙伴[" + partner.getData() + "]!";
     }
-
 
     /**
      * 单线程java示例

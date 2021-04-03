@@ -4,7 +4,11 @@ import com.alibaba.jvm.sandbox.repeater.plugin.core.util.LogUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.Enumeration;
+import java.util.HashSet;
 
 /**
  * @description:
@@ -42,6 +46,29 @@ public class IpUtil {
             } catch (UnknownHostException e) {
                 LogUtil.error(e.getMessage(), e);
             }
+        }
+        if (localhost.equals(ip)) {
+            ip = getRealIp();
+        }
+        return ip;
+    }
+
+    public static String getRealIp() {
+        String ip = "";
+        HashSet<Object> ipSet = new HashSet<>();
+        try {
+            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
+                NetworkInterface nextElement = en.nextElement();
+                for (Enumeration<InetAddress> enumIpAddr = nextElement.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
+                    InetAddress inetAddress = enumIpAddr.nextElement();
+                    if (!inetAddress.isLoopbackAddress() && !inetAddress.isLinkLocalAddress() && inetAddress.isSiteLocalAddress()) {
+                        ip = inetAddress.getHostAddress();
+                        ipSet.add(inetAddress.getHostAddress());
+                    }
+                }
+            }
+        } catch (SocketException e) {
+            LogUtil.error(e.getMessage(), e);
         }
         return ip;
     }
