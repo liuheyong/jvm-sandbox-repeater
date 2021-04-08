@@ -1,4 +1,4 @@
-package com.alibaba.repeater.console.start.util;
+package com.alibaba.repeater.console.service.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.util.LogUtil;

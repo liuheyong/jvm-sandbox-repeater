@@ -15,6 +15,7 @@ import com.alibaba.repeater.console.service.convert.ModelConverter;
 import com.alibaba.repeater.console.service.service.RecordService;
 import com.alibaba.repeater.console.service.util.ConvertUtil;
 import com.alibaba.repeater.console.service.util.EsUtil;
+import com.alibaba.repeater.console.service.util.IpUtil;
 import com.alibaba.repeater.console.service.util.ResultHelper;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,7 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +54,7 @@ public class RecordServiceImpl implements RecordService {
     private EsUtil esUtil;
 
     @Override
-    public RepeaterResult<String> saveRecord(String body) {
+    public RepeaterResult<String> saveRecord(String body, HttpServletRequest request) {
         try {
             RecordWrapper wrapper = SerializerWrapper.hessianDeserialize(body, RecordWrapper.class);
             if (wrapper == null || StringUtils.isEmpty(wrapper.getAppName())) {
@@ -60,6 +62,9 @@ public class RecordServiceImpl implements RecordService {
             }
             Record record = ConvertUtil.convertWrapper(wrapper, body);
             record.setId(record.getGmtRecord().toEpochSecond(ZoneOffset.ofHours(8)));
+            if (StringUtils.isNotBlank(record.getHost()) && "127.0.0.1".equals(record.getHost())) {
+                record.setHost(IpUtil.getIp(request));
+            }
             esUtil.save(Constant.RECORD_ES_INDEX, Constant.RECORD_ES_TYPE, record.getId(), record);
             return RepeaterResult.builder().success(true).message("operate success").data("-/-").build();
         } catch (Throwable throwable) {

@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import static com.alibaba.repeater.console.start.util.IpUtil.getRealIp;
+import static com.alibaba.repeater.console.service.util.IpUtil.getRealIp;
 
 /**
  * @description: logback日志添加ip信息

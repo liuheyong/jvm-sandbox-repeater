@@ -70,8 +70,8 @@ public class PersistenceFacadeApi {
      * @return
      */
     @RequestMapping(value = "record/save", method = RequestMethod.POST)
-    public RepeaterResult<String> recordSave(@RequestBody String body) {
-        return recordService.saveRecord(body);
+    public RepeaterResult<String> recordSave(@RequestBody String body, HttpServletRequest request) {
+        return recordService.saveRecord(body, request);
     }
 
     /**

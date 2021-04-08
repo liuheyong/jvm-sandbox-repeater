@@ -6,7 +6,7 @@ import com.alibaba.jvm.sandbox.repeater.plugin.core.util.LogUtil;
 import com.alibaba.jvm.sandbox.repeater.plugin.domain.RepeaterResult;
 import com.alibaba.repeater.console.common.domain.Regress;
 import com.alibaba.repeater.console.service.service.RegressService;
-import com.alibaba.repeater.console.start.util.IpUtil;
+import com.alibaba.repeater.console.service.util.IpUtil;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -45,7 +45,7 @@ public class RegressController {
      */
     @RequestMapping(value = "/partner/{name}", method = RequestMethod.GET)
     public String partner(@PathVariable("name") String name, HttpServletRequest request) throws UnknownHostException {
-        LogUtil.info("ip:{}", IpUtil.getIp(request));
+        LogUtil.info("请求ip:{}", IpUtil.getIp(request));
         String male = "李雷";
         String female = "韩梅梅";
         RepeaterResult<String> partner = regressService.findPartner(name);
