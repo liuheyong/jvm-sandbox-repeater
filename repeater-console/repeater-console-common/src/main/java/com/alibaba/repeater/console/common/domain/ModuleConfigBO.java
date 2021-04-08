@@ -4,7 +4,7 @@ import com.alibaba.jvm.sandbox.repeater.plugin.domain.RepeaterConfig;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * {@link ModuleConfigBO}
@@ -23,11 +23,11 @@ public class ModuleConfigBO extends BaseBO {
     /**
      * 应用名
      */
-    private Date gmtCreate;
+    private LocalDateTime gmtCreate;
     /**
      * 应用名
      */
-    private Date gmtModified;
+    private LocalDateTime gmtModified;
     /**
      * 应用名
      */

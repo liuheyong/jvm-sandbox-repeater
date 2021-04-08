@@ -3,7 +3,7 @@ package com.alibaba.repeater.console.common.domain;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -18,7 +18,7 @@ public class ReplayBO extends BaseBO {
     /**
      * 创建时间
      */
-    private Date gmtCreate;
+    private LocalDateTime gmtCreate;
     /**
      * 应用名
      */

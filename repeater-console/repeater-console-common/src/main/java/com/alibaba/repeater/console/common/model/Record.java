@@ -4,7 +4,7 @@ package com.alibaba.repeater.console.common.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -19,9 +19,9 @@ public class Record implements java.io.Serializable {
 
     private Long id;
 
-    private Date gmtCreate;
+    private LocalDateTime gmtCreate;
 
-    private Date gmtRecord;
+    private LocalDateTime gmtRecord;
 
     private String appName;
 

@@ -40,7 +40,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -211,10 +216,10 @@ public class ReplayServiceImpl implements ReplayService {
         replay.setEnvironment(params.getEnvironment());
         replay.setIp(params.getIp());
         replay.setRepeatId(params.getRepeatId());
-        replay.setGmtCreate(new Date());
-        replay.setGmtModified(new Date());
+        replay.setGmtCreate(LocalDateTime.now());
+        replay.setGmtModified(LocalDateTime.now());
         replay.setStatus(ReplayStatus.PROCESSING.getStatus());
-        replay.setId(replay.getGmtCreate().getTime());
+        replay.setId(replay.getGmtCreate().toEpochSecond(ZoneOffset.ofHours(8)));
         esUtil.save(Constant.REPLAY_ES_INDEX, Constant.REPLAY_ES_TYPE, replay.getId(), replay);
         return replay;
     }

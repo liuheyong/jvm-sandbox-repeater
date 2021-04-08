@@ -35,7 +35,11 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.net.URLEncoder;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -137,10 +141,10 @@ public class ModuleConfigServiceImpl implements ModuleConfigService {
             moduleConfig.setAppName(params.getAppName());
             moduleConfig.setEnvironment(params.getEnvironment());
             moduleConfig.setConfig(params.getConfig());
-            moduleConfig.setGmtCreate(new Date());
-            moduleConfig.setId(moduleConfig.getGmtCreate().getTime());
+            moduleConfig.setGmtCreate(LocalDateTime.now());
+            moduleConfig.setId(moduleConfig.getGmtCreate().toEpochSecond(ZoneOffset.ofHours(8)));
         }
-        moduleConfig.setGmtModified(new Date());
+        moduleConfig.setGmtModified(LocalDateTime.now());
         esUtil.save(Constant.MODULE_CONFIG_ES_INDEX, Constant.MODULE_CONFIG_ES_TYPE, moduleConfig.getId(), moduleConfig);
         return ResultHelper.success(moduleConfigConverter.convert(moduleConfig));
     }

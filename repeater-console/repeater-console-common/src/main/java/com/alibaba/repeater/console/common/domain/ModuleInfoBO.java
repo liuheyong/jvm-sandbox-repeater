@@ -3,7 +3,7 @@ package com.alibaba.repeater.console.common.domain;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * {@link ModuleInfoBO}
@@ -22,11 +22,11 @@ public class ModuleInfoBO extends BaseBO {
     /**
      * 创建时间
      */
-    private Date gmtCreate;
+    private LocalDateTime gmtCreate;
     /**
      * 修改时间
      */
-    private Date gmtModified;
+    private LocalDateTime gmtModified;
     /**
      * 应用名
      */

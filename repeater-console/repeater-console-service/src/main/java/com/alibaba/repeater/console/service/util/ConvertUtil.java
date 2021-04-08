@@ -6,7 +6,8 @@ import com.alibaba.jvm.sandbox.repeater.plugin.core.serialize.SerializerProvider
 import com.alibaba.jvm.sandbox.repeater.plugin.core.wrapper.RecordWrapper;
 import com.alibaba.repeater.console.common.model.Record;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.HashMap;
 
 /**
@@ -21,8 +22,8 @@ public class ConvertUtil {
         Record record = new Record();
         record.setAppName(wrapper.getAppName());
         record.setEnvironment(wrapper.getEnvironment());
-        record.setGmtCreate(new Date());
-        record.setGmtRecord(new Date(wrapper.getTimestamp()));
+        record.setGmtCreate(LocalDateTime.now());
+        record.setGmtRecord(LocalDateTime.ofEpochSecond(wrapper.getTimestamp(), 0, ZoneOffset.ofHours(8)));
         record.setHost(wrapper.getHost());
         // TODO wenyixicodedog  traceId
         record.setTraceId(wrapper.getTraceId());

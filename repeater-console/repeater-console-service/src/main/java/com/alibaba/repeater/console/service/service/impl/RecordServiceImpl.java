@@ -28,6 +28,7 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -58,7 +59,7 @@ public class RecordServiceImpl implements RecordService {
                 return RepeaterResult.builder().success(false).message("invalid request").build();
             }
             Record record = ConvertUtil.convertWrapper(wrapper, body);
-            record.setId(record.getGmtRecord().getTime());
+            record.setId(record.getGmtRecord().toEpochSecond(ZoneOffset.ofHours(8)));
             esUtil.save(Constant.RECORD_ES_INDEX, Constant.RECORD_ES_TYPE, record.getId(), record);
             return RepeaterResult.builder().success(true).message("operate success").data("-/-").build();
         } catch (Throwable throwable) {

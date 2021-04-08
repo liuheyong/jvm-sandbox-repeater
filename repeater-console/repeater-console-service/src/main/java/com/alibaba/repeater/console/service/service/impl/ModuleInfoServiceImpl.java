@@ -27,7 +27,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.io.*;
 import java.lang.management.ManagementFactory;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -143,9 +144,9 @@ public class ModuleInfoServiceImpl implements ModuleInfoService {
     @Override
     public RepeaterResult<ModuleInfoBO> report(ModuleInfoBO params) {
         ModuleInfo moduleInfo = moduleInfoConverter.reconvert(params);
-        moduleInfo.setGmtModified(new Date());
-        moduleInfo.setGmtCreate(new Date());
-        moduleInfo.setId(moduleInfo.getGmtCreate().getTime());
+        moduleInfo.setGmtModified(LocalDateTime.now());
+        moduleInfo.setGmtCreate(LocalDateTime.now());
+        moduleInfo.setId(moduleInfo.getGmtCreate().toEpochSecond(ZoneOffset.ofHours(8)));
         if (esUtil.indexExists(Constant.MODULE_INFO_ES_INDEX)) {
             SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
                     .timeout(new TimeValue(5, TimeUnit.SECONDS))
@@ -262,7 +263,7 @@ public class ModuleInfoServiceImpl implements ModuleInfoService {
             return ResultHelper.fail(resp.getMessage());
         }
         moduleInfo.setStatus(finishStatus.name());
-        moduleInfo.setGmtModified(new Date());
+        moduleInfo.setGmtModified(LocalDateTime.now());
         esUtil.save(Constant.MODULE_INFO_ES_INDEX, Constant.MODULE_INFO_ES_TYPE, moduleInfo.getId(), moduleInfo);
         return ResultHelper.success(moduleInfoConverter.convert(moduleInfo));
     }

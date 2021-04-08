@@ -13,6 +13,7 @@ import java.util.Map;
  */
 @Getter
 public enum ModuleStatus {
+
     /**
      * 已激活
      */
