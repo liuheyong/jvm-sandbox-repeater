@@ -12,13 +12,13 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * {@link PersistenceFacadeApi} Demo工程；console为repeater提供的录制回放的相关接口
+ * {@link PersistenceFacadeController} Demo工程；console为repeater提供的录制回放的相关接口
  *
  * @author zhaoyb1990
  */
 @RestController
 @RequestMapping("/facade/api/")
-public class PersistenceFacadeApi {
+public class PersistenceFacadeController {
 
     @Resource
     private RecordService recordService;

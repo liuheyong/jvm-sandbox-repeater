@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 /**
- * {@link ConfigFacadeApi} Demo工程；作为repeater录制回放的配置管理服务
+ * {@link ConfigFacadeController} Demo工程；作为repeater录制回放的配置管理服务
  * <p>
  *
  * @author zhaoyb1990
  */
 @RestController
 @RequestMapping("/facade/api")
-public class ConfigFacadeApi {
+public class ConfigFacadeController {
 
     @Resource
     private ModuleConfigService moduleConfigService;
