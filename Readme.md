@@ -1,3 +1,5 @@
+【接入了ES作为数据存储】
+
 ![logo](https://sandbox-ecological.oss-cn-hangzhou.aliyuncs.com/repeater-logo.png)
 
 [![Build Status](https://travis-ci.org/alibaba/jvm-sandbox-repeater.svg?branch=master)](https://travis-ci.org/alibaba/jvm-sandbox-repeater)

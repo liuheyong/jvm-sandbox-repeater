@@ -3,7 +3,7 @@ package com.alibaba.repeater.console.service.convert;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.serialize.SerializeException;
 import com.alibaba.jvm.sandbox.repeater.plugin.domain.RepeaterConfig;
 import com.alibaba.repeater.console.common.domain.ModuleConfigBO;
-import com.alibaba.repeater.console.dal.model.ModuleConfig;
+import com.alibaba.repeater.console.common.model.ModuleConfig;
 import com.alibaba.repeater.console.service.util.JacksonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;

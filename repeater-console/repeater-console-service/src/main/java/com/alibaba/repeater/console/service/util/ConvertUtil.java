@@ -3,11 +3,11 @@ package com.alibaba.repeater.console.service.util;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.serialize.SerializeException;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.serialize.Serializer;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.serialize.SerializerProvider;
-import com.alibaba.jvm.sandbox.repeater.plugin.domain.InvokeType;
-import com.alibaba.repeater.console.dal.model.Record;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.wrapper.RecordWrapper;
+import com.alibaba.repeater.console.common.model.Record;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.HashMap;
 
 /**
@@ -18,19 +18,20 @@ import java.util.HashMap;
  */
 public class ConvertUtil {
 
-    public static Record convertWrapper(RecordWrapper wrapper, String body){
+    public static Record convertWrapper(RecordWrapper wrapper, String body) {
         Record record = new Record();
         record.setAppName(wrapper.getAppName());
         record.setEnvironment(wrapper.getEnvironment());
-        record.setGmtCreate(new Date());
-        record.setGmtRecord(new Date(wrapper.getTimestamp()));
+        record.setGmtCreate(LocalDateTime.now());
+        record.setGmtRecord(LocalDateTime.ofEpochSecond(wrapper.getTimestamp(), 0, ZoneOffset.ofHours(8)));
         record.setHost(wrapper.getHost());
+        // TODO wenyixicodedog  traceId
         record.setTraceId(wrapper.getTraceId());
         Serializer hessian = SerializerProvider.instance().provide(Serializer.Type.HESSIAN);
         try {
             Object response = hessian.deserialize(wrapper.getEntranceInvocation().getResponseSerialized(), Object.class);
             if (response instanceof String) {
-                record.setResponse(convert2Json((String)response));
+                record.setResponse(convert2Json((String) response));
             } else {
                 record.setResponse(JacksonUtil.serialize(response));
             }

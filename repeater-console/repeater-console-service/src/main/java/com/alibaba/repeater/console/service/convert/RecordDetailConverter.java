@@ -7,7 +7,7 @@ import com.alibaba.jvm.sandbox.repeater.plugin.core.wrapper.RecordWrapper;
 import com.alibaba.jvm.sandbox.repeater.plugin.domain.Invocation;
 import com.alibaba.repeater.console.common.domain.InvocationBO;
 import com.alibaba.repeater.console.common.domain.RecordDetailBO;
-import com.alibaba.repeater.console.dal.model.Record;
+import com.alibaba.repeater.console.common.model.Record;
 import com.alibaba.repeater.console.service.util.JacksonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;

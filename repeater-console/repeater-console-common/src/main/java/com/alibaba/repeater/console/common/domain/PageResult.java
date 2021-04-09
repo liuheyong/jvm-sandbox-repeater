@@ -15,10 +15,17 @@ import java.util.List;
 @Setter
 public class PageResult<T> implements java.io.Serializable {
 
+    /**
+     * 分页数据
+     */
     private List<T> data;
-
+    /**
+     * 分页返回结果标识数据
+     */
     private boolean success;
-
+    /**
+     * 分页返回结果信息
+     */
     private String message;
 
     private Long count;

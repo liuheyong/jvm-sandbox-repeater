@@ -3,8 +3,8 @@ package com.alibaba.repeater.console.start.controller.api;
 import com.alibaba.jvm.sandbox.repeater.plugin.domain.RepeatModel;
 import com.alibaba.jvm.sandbox.repeater.plugin.domain.RepeaterResult;
 import com.alibaba.repeater.console.common.params.ReplayParams;
-import com.alibaba.repeater.console.service.RecordService;
-import com.alibaba.repeater.console.service.ReplayService;
+import com.alibaba.repeater.console.service.service.RecordService;
+import com.alibaba.repeater.console.service.service.ReplayService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,14 +12,13 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * {@link PersistenceFacadeApi} Demo工程；作为repeater录制回放的数据存储
- * <p>
+ * {@link PersistenceFacadeController} Demo工程；console为repeater提供的录制回放的相关接口
  *
  * @author zhaoyb1990
  */
 @RestController
 @RequestMapping("/facade/api/")
-public class PersistenceFacadeApi {
+public class PersistenceFacadeController {
 
     @Resource
     private RecordService recordService;
@@ -55,7 +54,7 @@ public class PersistenceFacadeApi {
     }
 
     /**
-     * 手动回放消息取数据地址
+     * 回放消息取record数据
      *
      * @return
      */
@@ -71,8 +70,8 @@ public class PersistenceFacadeApi {
      * @return
      */
     @RequestMapping(value = "record/save", method = RequestMethod.POST)
-    public RepeaterResult<String> recordSave(@RequestBody String body) {
-        return recordService.saveRecord(body);
+    public RepeaterResult<String> recordSave(@RequestBody String body, HttpServletRequest request) {
+        return recordService.saveRecord(body, request);
     }
 
     /**

@@ -1,10 +1,12 @@
-package com.alibaba.repeater.console.start.controller.test;
+package com.alibaba.repeater.console.start.controller.regress;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.jvm.sandbox.repeater.plugin.core.util.ExecutorInner;
+import com.alibaba.jvm.sandbox.repeater.plugin.core.util.LogUtil;
 import com.alibaba.jvm.sandbox.repeater.plugin.domain.RepeaterResult;
 import com.alibaba.repeater.console.common.domain.Regress;
-import com.alibaba.repeater.console.service.RegressService;
+import com.alibaba.repeater.console.service.service.RegressService;
+import com.alibaba.repeater.console.service.util.IpUtil;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,12 +20,14 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.UnknownHostException;
 import java.util.List;
 
 /**
  * {@link RegressController} 持续回归demo服务
  * <p>
  * 回归服务，相当于一个示例的被测服务。官方的 slogan 例子用的就是这里的接口
+ *
  * @author zhaoyb1990
  */
 @RestController
@@ -33,7 +37,6 @@ public class RegressController {
     @Resource
     private RegressService regressService;
 
-
     /**
      * 单线程java示例
      *
@@ -41,17 +44,17 @@ public class RegressController {
      * @return
      */
     @RequestMapping(value = "/partner/{name}", method = RequestMethod.GET)
-    public String partner(@PathVariable("name") String name) {
+    public String partner(@PathVariable("name") String name, HttpServletRequest request) throws UnknownHostException {
+        LogUtil.info("请求ip:{}", IpUtil.getIp(request));
         String male = "李雷";
         String female = "韩梅梅";
         RepeaterResult<String> partner = regressService.findPartner(name);
         if (partner.getData().equals(female) && male.equals(name)) {
             return "天哪!李雷和韩梅梅终于在一起了~";
         }
-        return  name + "成功匹配到小伙伴[" + partner.getData() + "]!";
+        LogUtil.info(name + "成功匹配到小伙伴[" + partner.getData() + "]!");
+        return name + "成功匹配到小伙伴[" + partner.getData() + "]!";
     }
-
-
 
     /**
      * 单线程java示例

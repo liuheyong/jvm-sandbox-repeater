@@ -13,7 +13,6 @@ public class LogUtil {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(LogUtil.class);
 
-
     public static void info(String placeholder, Object... params) {
         LOGGER.info(placeholder, params);
     }

@@ -5,14 +5,16 @@ import com.alibaba.repeater.console.common.domain.PageResult;
 import com.alibaba.repeater.console.common.domain.RecordBO;
 import com.alibaba.repeater.console.common.domain.RecordDetailBO;
 import com.alibaba.repeater.console.common.params.RecordParams;
-import com.alibaba.repeater.console.service.RecordService;
+import com.alibaba.repeater.console.service.service.RecordService;
 import com.alibaba.repeater.console.start.controller.vo.PagerAdapter;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 
 /**
  * {@link OnlineController}
@@ -21,27 +23,40 @@ import javax.annotation.Resource;
  *
  * @author zhaoyb1990
  */
-@Controller
+@RestController
 @RequestMapping("/online")
 public class OnlineController {
 
     @Resource
     private RecordService recordService;
 
-    @RequestMapping("search.htm")
-    public String search(@ModelAttribute("requestParams") RecordParams params, Model model) {
+    /**
+     * 在线列表接口
+     *
+     * @Author: liuheyong
+     * @date: 2021/3/25
+     */
+    @PostMapping("/online_list")
+    public RepeaterResult<PagerAdapter<RecordBO>> search(@RequestBody RecordParams params) {
         PageResult<RecordBO> result = recordService.query(params);
-        PagerAdapter.transform0(result, model);
-        return "online/search";
+        if (CollectionUtils.isEmpty(result.getData())) {
+            return RepeaterResult.builder().success(true).data(new ArrayList<>()).build();
+        }
+        return RepeaterResult.builder().success(true).data(PagerAdapter.transform(result)).build();
     }
 
-    @RequestMapping("detail.htm")
-    public String detail(@ModelAttribute("requestParams") RecordParams params, Model model) {
+    /**
+     * 在线详情接口
+     *
+     * @Author: liuheyong
+     * @date: 2021/3/25
+     */
+    @PostMapping("/online_detail")
+    public RepeaterResult<RecordDetailBO> detail(@RequestBody RecordParams params) {
         RepeaterResult<RecordDetailBO> result = recordService.getDetail(params);
         if (!result.isSuccess()) {
-            return "/error/404";
+            return RepeaterResult.builder().success(false).message("fail").build();
         }
-        model.addAttribute("record", result.getData());
-        return "online/detail";
+        return result;
     }
 }

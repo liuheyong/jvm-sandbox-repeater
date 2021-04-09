@@ -12,6 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MockInvocationBO extends BaseBO {
+
     private Integer index;
     private Boolean success;
     private Boolean skip;

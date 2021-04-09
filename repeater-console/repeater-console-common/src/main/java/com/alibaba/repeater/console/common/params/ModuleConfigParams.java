@@ -13,9 +13,16 @@ import lombok.Setter;
 @Setter
 public class ModuleConfigParams extends BaseParams {
 
+    /**
+     * 应用名
+     */
     private String appName;
-
+    /**
+     * 环境信息
+     */
     private String environment;
-
+    /**
+     * 配置信息
+     */
     private String config;
 }

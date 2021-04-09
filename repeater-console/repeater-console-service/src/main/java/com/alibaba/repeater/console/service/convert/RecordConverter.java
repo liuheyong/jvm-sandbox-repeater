@@ -1,7 +1,7 @@
 package com.alibaba.repeater.console.service.convert;
 
 import com.alibaba.repeater.console.common.domain.RecordBO;
-import com.alibaba.repeater.console.dal.model.Record;
+import com.alibaba.repeater.console.common.model.Record;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 

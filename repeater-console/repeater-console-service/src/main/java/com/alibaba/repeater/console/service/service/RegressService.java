@@ -1,4 +1,4 @@
-package com.alibaba.repeater.console.service;
+package com.alibaba.repeater.console.service.service;
 
 import com.alibaba.jvm.sandbox.repeater.plugin.domain.RepeaterResult;
 import com.alibaba.repeater.console.common.domain.Regress;
@@ -30,7 +30,6 @@ public interface RegressService {
      */
     RepeaterResult<List<Regress>> getRegress(String name, int count);
 
-
     /**
      * 找到你的小伙伴
      *
@@ -41,12 +40,14 @@ public interface RegressService {
 
     /**
      * 喊口号
+     *
      * @return
      */
     String slogan();
 
     /**
      * 从缓存中获取regress对象
+     *
      * @param name 名字
      * @return regress对象
      */

@@ -57,7 +57,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- = = = = = = = = ==-->
             <!-- self dependencies -->
             <dependency>
                 <groupId>com.alibaba.jvm.sandbox</groupId>
